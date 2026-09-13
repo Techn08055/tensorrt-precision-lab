@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# OS junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Large / regenerable model artifacts — see README "Reproduce" (export.py, build_and_bench.py, calibrate_int8.py)
+models/*.onnx
+models/*.onnx.data
+models/*.pth
+fp32/*.engine
+fp16/*.engine
+int8/*.engine
+calibration/calibration.cache
+
+# Large binary Nsight traces — the small *_cuda_gpu_kern_sum.csv summaries are kept, they're the actual cited evidence
+profiling/nsys/*.nsys-rep
+
+# Video production assets: a separate Remotion project (video/) that already has its own
+# git repo and .gitignore, plus the raw narration audio. Not part of the TensorRT experiment.
+video/
+audio/

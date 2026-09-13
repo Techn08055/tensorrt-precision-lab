@@ -1,0 +1,22 @@
+{
+  "batch": 32,
+  "seed": 0,
+  "input": "real images (../calibration/images)",
+  "results": {
+    "resnet50_fp32": {
+      "max_abs_diff": 0.027880389243364334,
+      "mean_abs_diff": 0.0009583239443600178,
+      "top1_match_rate": 1.0
+    },
+    "resnet50_fp16": {
+      "max_abs_diff": 0.08669918775558472,
+      "mean_abs_diff": 0.00216861255466938,
+      "top1_match_rate": 1.0
+    },
+    "resnet50_int8": {
+      "max_abs_diff": 2.396238327026367,
+      "mean_abs_diff": 0.06979414075613022,
+      "top1_match_rate": 0.9375
+    }
+  }
+}

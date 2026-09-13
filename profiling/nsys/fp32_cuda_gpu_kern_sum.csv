@@ -1,0 +1,25 @@
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+10.6,64052570,1600,40032.9,41439.0,34399,49279,4309.7,trt_ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1
+9.4,56733367,320,177291.8,170907.0,170171,191738,9545.8,sm70_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage1_warpsize1x4x1_g1_ffma_t1r1s1_aligna4_alignc4_execute_kernel_trt
+9.1,54732274,640,85519.2,83550.0,75486,217466,8633.7,sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec2_fltVec1_1_TP7_TQ8_C8_R3_S3_U1_V1_execute_kernel_trt
+8.9,53445040,1920,27836.0,30655.0,17248,37727,6681.7,sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8_execute_kernel_trt
+7.9,47483879,2560,18548.4,16479.0,15455,32447,4176.1,sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8_execute_kernel_trt
+7.8,46722652,2240,20858.3,18847.0,18079,31423,3338.3,sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8_execute_kernel_trt
+6.2,37585642,320,117455.1,112316.5,109117,131388,8266.5,sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4_execute_kernel_trt
+5.1,30591404,960,31866.0,30463.0,29055,36607,2424.3,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8_execute_kernel_trt
+5.0,30174466,1600,18859.0,17759.0,16895,24831,1629.7,sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8_execute_kernel_trt
+4.8,29144733,960,30359.1,29087.5,27839,34687,2241.8,sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2_execute_kernel_trt
+3.9,23425909,640,36603.0,35967.0,32607,42655,3024.8,sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r1s1_execute_kernel_trt
+3.6,21808815,320,68152.5,64926.5,63167,76030,5087.9,trt_ampere_scudnn_128x32_sliced1x4_ldg4_relu_exp_small_nhwc_tn_v1
+3.1,18615708,320,58174.1,55423.0,53918,64766,4316.8,sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4_execute_kernel_trt
+2.9,17734913,640,27710.8,26559.0,26079,30943,1824.8,sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x32x64_stage4_warpsize2x1x2_tensor16x8x8_execute_kernel_trt
+2.7,16528962,960,17217.7,16448.0,15807,19615,1261.8,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_execute_kernel_trt
+2.6,15572846,320,48665.1,46174.5,45631,193275,8695.1,sm50_xmma_cublas_gemvx_f32f32_f32_f32_tn_n_int32_unit_n_launch_param4x32x32_strided_unit_stride_execute_kernel_trt
+2.4,14468559,320,45214.2,43166.5,41311,51647,3400.2,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4_execute_kernel_trt
+1.2,7021309,640,10970.8,10863.0,5792,17631,4707.3,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_alignc8_execute_kernel_trt
+1.0,5890251,3200,1840.7,1792.0,1440,2368,209.3,"void cuInt8::nchwToNhwcKernel<float>(int, int, int, int, int, int, int, int, bool, const T1 *, T1 *)"
+0.9,5606812,3200,1752.1,1696.0,1408,2272,195.2,"void cuInt8::nhwcToNchwKernel<float>(int, int, int, int, int, int, int, int, const T1 *, T1 *)"
+0.4,2430073,320,7594.0,7263.0,7008,8480,551.3,sm50_xmma_pooling_max_nhwc_FP32FP32_WINDOWSIZE_3_NOT_PROPAGATE_NAN_2D_execute_kernel_trt
+0.3,1789810,320,5593.2,5376.0,5184,6368,390.6,"void genericReformat::copyPackedKernel<float, float, (bool)1, (bool)1, genericReformat::ArrayN<(int)4>, (int)4>(unsigned int, unsigned int, const void *, genericReformat::ArrayN<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayN<T6>, int, int, int, const float *, void *, genericReformat::ArrayN<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayN<T6>, int, int, int, const float *, T5)"
+0.1,866122,320,2706.6,2592.0,2496,3040,196.0,sm50_xmma_pooling_fw_4d_FP32FP32NHWC_Average_FastDiv_CAlign4_execute_kernel_trt
+0.0,1664,1,1664.0,1664.0,1664,1664,0.0,"void cask_trt::computeOffsetsKernel<(bool)0, (bool)0>(cask_trt::ComputeOffsetsParams)"

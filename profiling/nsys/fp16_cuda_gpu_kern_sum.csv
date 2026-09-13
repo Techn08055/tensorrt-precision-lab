@@ -1,0 +1,25 @@
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+9.2,20923520,1600,13077.2,13024.0,12768,19103,246.1,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x64x64_stage4_warpsize2x1x2_g1_tensor16x8x16_aACCESS_execute_kernel_trt
+8.9,20280232,1920,10562.6,11839.5,7360,12736,2197.3,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x64x64_stage1_warpsize2x2x1_g1_tensor16x8x8_execute_kernel_trt
+8.6,19431340,640,30361.5,29695.0,28383,33856,1862.6,sm80_xmma_fprop_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x32x64_stage5_warpsize2x2x1_g1_tensor16x8x16_execute_kernel_trt
+7.8,17601587,1920,9167.5,9119.0,8927,10688,180.4,sm80_xmma_gemm_f16f16_f16f16_f16_tn_n_tilesize128x128x32_stage4_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+7.4,16817114,960,17517.8,17600.0,15616,21312,1655.1,trt_ampere_h16816gemm_128x64_ldg8_relu_stages_32x6_tn_v1
+7.2,16245434,1280,12691.7,12640.0,12479,13088,147.5,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x128x32_stage5_warpsize2x2x1_g1_tensor16x8x16_t1r3s3_execute_kernel_trt
+6.7,15266324,1600,9541.5,9247.0,8479,11456,839.1,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x128x32_stage1_warpsize2x2x1_g1_tensor16x8x8_simple_t1r1s1_execute_kernel_trt
+5.3,12029626,320,37592.6,36159.0,35871,41791,2220.8,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x32x64_stage5_warpsize2x2x1_g1_tensor16x8x16_t1r3s3_execute_kernel_trt
+5.3,12018584,1600,7511.6,7487.0,7327,8960,119.2,sm80_xmma_gemm_f16f16_f16f16_f16_nn_n_tilesize64x64x64_stage4_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+4.8,10867119,1280,8489.9,8288.0,8064,153948,4073.0,sm75_xmma_fprop_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x128x32_stage1_warpsize2x2x1_g1_tensor16x8x8_execute_kernel_trt
+4.5,10158179,320,31744.3,30559.0,30335,41023,1879.3,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x128x32_stage5_warpsize2x2x1_g1_tensor16x8x16_execute_kernel_trt
+4.2,9576112,640,14962.7,14528.0,14143,16672,806.4,sm80_xmma_gemm_f16f16_f16f16_f16_nn_n_tilesize64x32x64_stage5_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+3.7,8368484,320,26151.5,25152.0,24927,28991,1559.4,sm50_xmma_cublas_gemvx_f16f16_f16_f16_tn_n_int32_unit_n_launch_param64x8x8_strided_unit_stride_execute_kernel_trt
+3.2,7162510,960,7460.9,7392.0,7295,8000,138.9,sm80_xmma_gemm_f16f16_f16f16_f16_nn_n_tilesize128x64x32_stage5_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+3.0,6856570,320,21426.8,21407.0,21119,21759,115.2,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x16_aligna8_alignc8_execute_kernel_trt
+2.0,4532685,320,14164.6,14144.0,13856,14560,131.9,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize256x64x32_stage3_warpsize4x1x1_g1_tensor16x8x16_execute_kernel_trt
+1.9,4247678,320,13274.0,13279.0,12960,13759,113.0,sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x64x64_stage4_warpsize2x2x1_g1_tensor16x8x16_t1r3s3_aACCESS_execute_kernel_trt
+1.8,4083846,320,12762.0,12608.0,12191,14015,365.5,sm80_xmma_gemm_f16f16_f16f16_f16_nn_n_tilesize64x128x32_stage5_warpsize2x2x1_tensor16x8x16_execute_kernel_trt
+1.7,3745679,320,11705.2,11680.0,11456,12128,107.7,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x128x32_stage1_warpsize2x2x1_g1_tensor16x8x8_t1r1s1_execute_kernel_trt
+1.0,2310165,320,7219.3,7200.0,6879,7584,83.8,"void genericReformat::copyPackedKernel<float, __half, (bool)1, (bool)1, genericReformat::ArrayN<(int)4>, (int)4>(unsigned int, unsigned int, const void *, genericReformat::ArrayN<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayN<T6>, int, int, int, const float *, void *, genericReformat::ArrayN<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayNWithReducedDivisors<T6>, genericReformat::ArrayN<T6>, int, int, int, const float *, T5)"
+0.7,1588965,320,4965.5,4544.0,4384,134428,7260.2,sm75_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x64x64_stage1_warpsize2x2x1_g1_tensor16x8x8_simple_t1r1s1_execute_kernel_trt
+0.7,1555200,320,4860.0,4864.0,4736,4992,49.9,sm50_xmma_pooling_coalescedC_NHWC_kMAX_3_False_execute_kernel_trt
+0.4,919411,320,2873.2,2880.0,2847,2912,15.8,sm50_xmma_pooling_fw_4d_FP16FP32NHWC_Average_FastDiv_CAlign8_execute_kernel_trt
+0.1,338844,320,1058.9,1056.0,1024,1088,10.2,__myl_Cast_0x33c744558abe44511fee3fa6338a6b82

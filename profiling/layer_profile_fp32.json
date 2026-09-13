@@ -1,0 +1,1023 @@
+{
+  "batch": 1,
+  "iters": 100,
+  "precision": "fp32",
+  "num_layers": 85,
+  "total_avg_ms": 2.30931,
+  "time_by_category_ms": {
+    "compute-bound": 2.12842,
+    "other": 0.07679,
+    "memory-bound": 0.1041
+  },
+  "time_by_category_pct": {
+    "compute-bound": 92.17,
+    "other": 3.33,
+    "memory-bound": 4.51
+  },
+  "fallback_layer_count": 0,
+  "fallback_layers": [],
+  "top_layers": [
+    {
+      "index": 65,
+      "name": "node_Conv_846",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm70_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage1_warpsize1x4x1_g1_ffma_t1r1s1_aligna4_alignc4",
+      "avg_ms": 0.20669,
+      "category": "compute-bound",
+      "pct_of_total": 8.95
+    },
+    {
+      "index": 68,
+      "name": "node_Conv_842 + node_relu_41",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4",
+      "avg_ms": 0.13452,
+      "category": "compute-bound",
+      "pct_of_total": 5.83
+    },
+    {
+      "index": 79,
+      "name": "node_Conv_856 + node_relu_47",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec2_fltVec1_1_TP7_TQ8_C8_R3_S3_U1_V1",
+      "avg_ms": 0.10327,
+      "category": "compute-bound",
+      "pct_of_total": 4.47
+    },
+    {
+      "index": 74,
+      "name": "node_Conv_850 + node_relu_44",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec2_fltVec1_1_TP7_TQ8_C8_R3_S3_U1_V1",
+      "avg_ms": 0.09532,
+      "category": "compute-bound",
+      "pct_of_total": 4.13
+    },
+    {
+      "index": 37,
+      "name": "node_Conv_804 + node_relu_23",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_128x32_sliced1x4_ldg4_relu_exp_small_nhwc_tn_v1",
+      "avg_ms": 0.07553,
+      "category": "compute-bound",
+      "pct_of_total": 3.27
+    },
+    {
+      "index": 17,
+      "name": "node_Conv_778 + node_relu_11",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4",
+      "avg_ms": 0.06509,
+      "category": "compute-bound",
+      "pct_of_total": 2.82
+    },
+    {
+      "index": 84,
+      "name": "node_linear_myl84_0",
+      "type": "gemm",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_cublas_gemvx_f32f32_f32_f32_tn_n_int32_unit_n_launch_param4x32x32_strided_unit_stride",
+      "avg_ms": 0.0611,
+      "category": "other",
+      "pct_of_total": 2.65
+    },
+    {
+      "index": 41,
+      "name": "node_Conv_812 + node_relu_26",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.055,
+      "category": "compute-bound",
+      "pct_of_total": 2.38
+    },
+    {
+      "index": 1,
+      "name": "node_Conv_754 + node_relu",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4",
+      "avg_ms": 0.0521,
+      "category": "compute-bound",
+      "pct_of_total": 2.26
+    },
+    {
+      "index": 51,
+      "name": "node_Conv_824 + node_relu_32",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.05118,
+      "category": "compute-bound",
+      "pct_of_total": 2.22
+    },
+    {
+      "index": 56,
+      "name": "node_Conv_830 + node_relu_35",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.04562,
+      "category": "compute-bound",
+      "pct_of_total": 1.98
+    },
+    {
+      "index": 46,
+      "name": "node_Conv_818 + node_relu_29",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.0446,
+      "category": "compute-bound",
+      "pct_of_total": 1.93
+    },
+    {
+      "index": 61,
+      "name": "node_Conv_836 + node_relu_38",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.04321,
+      "category": "compute-bound",
+      "pct_of_total": 1.87
+    },
+    {
+      "index": 14,
+      "name": "node_Conv_782",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r1s1",
+      "avg_ms": 0.04316,
+      "category": "compute-bound",
+      "pct_of_total": 1.87
+    },
+    {
+      "index": 35,
+      "name": "node_Conv_808",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r1s1",
+      "avg_ms": 0.04217,
+      "category": "compute-bound",
+      "pct_of_total": 1.83
+    }
+  ],
+  "layers": [
+    {
+      "index": 65,
+      "name": "node_Conv_846",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm70_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage1_warpsize1x4x1_g1_ffma_t1r1s1_aligna4_alignc4",
+      "avg_ms": 0.20669,
+      "category": "compute-bound",
+      "pct_of_total": 8.95
+    },
+    {
+      "index": 68,
+      "name": "node_Conv_842 + node_relu_41",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4",
+      "avg_ms": 0.13452,
+      "category": "compute-bound",
+      "pct_of_total": 5.83
+    },
+    {
+      "index": 79,
+      "name": "node_Conv_856 + node_relu_47",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec2_fltVec1_1_TP7_TQ8_C8_R3_S3_U1_V1",
+      "avg_ms": 0.10327,
+      "category": "compute-bound",
+      "pct_of_total": 4.47
+    },
+    {
+      "index": 74,
+      "name": "node_Conv_850 + node_relu_44",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec2_fltVec1_1_TP7_TQ8_C8_R3_S3_U1_V1",
+      "avg_ms": 0.09532,
+      "category": "compute-bound",
+      "pct_of_total": 4.13
+    },
+    {
+      "index": 37,
+      "name": "node_Conv_804 + node_relu_23",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_128x32_sliced1x4_ldg4_relu_exp_small_nhwc_tn_v1",
+      "avg_ms": 0.07553,
+      "category": "compute-bound",
+      "pct_of_total": 3.27
+    },
+    {
+      "index": 17,
+      "name": "node_Conv_778 + node_relu_11",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4",
+      "avg_ms": 0.06509,
+      "category": "compute-bound",
+      "pct_of_total": 2.82
+    },
+    {
+      "index": 84,
+      "name": "node_linear_myl84_0",
+      "type": "gemm",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_cublas_gemvx_f32f32_f32_f32_tn_n_int32_unit_n_launch_param4x32x32_strided_unit_stride",
+      "avg_ms": 0.0611,
+      "category": "other",
+      "pct_of_total": 2.65
+    },
+    {
+      "index": 41,
+      "name": "node_Conv_812 + node_relu_26",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.055,
+      "category": "compute-bound",
+      "pct_of_total": 2.38
+    },
+    {
+      "index": 1,
+      "name": "node_Conv_754 + node_relu",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4",
+      "avg_ms": 0.0521,
+      "category": "compute-bound",
+      "pct_of_total": 2.26
+    },
+    {
+      "index": 51,
+      "name": "node_Conv_824 + node_relu_32",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.05118,
+      "category": "compute-bound",
+      "pct_of_total": 2.22
+    },
+    {
+      "index": 56,
+      "name": "node_Conv_830 + node_relu_35",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.04562,
+      "category": "compute-bound",
+      "pct_of_total": 1.98
+    },
+    {
+      "index": 46,
+      "name": "node_Conv_818 + node_relu_29",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.0446,
+      "category": "compute-bound",
+      "pct_of_total": 1.93
+    },
+    {
+      "index": 61,
+      "name": "node_Conv_836 + node_relu_38",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+      "avg_ms": 0.04321,
+      "category": "compute-bound",
+      "pct_of_total": 1.87
+    },
+    {
+      "index": 14,
+      "name": "node_Conv_782",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r1s1",
+      "avg_ms": 0.04316,
+      "category": "compute-bound",
+      "pct_of_total": 1.87
+    },
+    {
+      "index": 35,
+      "name": "node_Conv_808",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r1s1",
+      "avg_ms": 0.04217,
+      "category": "compute-bound",
+      "pct_of_total": 1.83
+    },
+    {
+      "index": 76,
+      "name": "node_Conv_852 + node_add_1189 + node_relu_45",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.04036,
+      "category": "compute-bound",
+      "pct_of_total": 1.75
+    },
+    {
+      "index": 71,
+      "name": "node_Conv_844 + node_add_1113 + node_relu_42",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.04022,
+      "category": "compute-bound",
+      "pct_of_total": 1.74
+    },
+    {
+      "index": 81,
+      "name": "node_Conv_858 + node_add_1265 + node_relu_48",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.039,
+      "category": "compute-bound",
+      "pct_of_total": 1.69
+    },
+    {
+      "index": 27,
+      "name": "node_Conv_792 + node_relu_17",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2",
+      "avg_ms": 0.03829,
+      "category": "compute-bound",
+      "pct_of_total": 1.66
+    },
+    {
+      "index": 22,
+      "name": "node_Conv_786 + node_relu_14",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2",
+      "avg_ms": 0.038,
+      "category": "compute-bound",
+      "pct_of_total": 1.65
+    },
+    {
+      "index": 66,
+      "name": "node_Conv_840 + node_relu_40",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.03787,
+      "category": "compute-bound",
+      "pct_of_total": 1.64
+    },
+    {
+      "index": 32,
+      "name": "node_Conv_798 + node_relu_20",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2",
+      "avg_ms": 0.03706,
+      "category": "compute-bound",
+      "pct_of_total": 1.6
+    },
+    {
+      "index": 5,
+      "name": "node_Conv_758 + node_relu_2",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.03694,
+      "category": "compute-bound",
+      "pct_of_total": 1.6
+    },
+    {
+      "index": 12,
+      "name": "node_Conv_772 + node_relu_8",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.03676,
+      "category": "compute-bound",
+      "pct_of_total": 1.59
+    },
+    {
+      "index": 77,
+      "name": "node_Conv_854 + node_relu_46",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x32x64_stage4_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.0367,
+      "category": "compute-bound",
+      "pct_of_total": 1.59
+    },
+    {
+      "index": 9,
+      "name": "node_Conv_766 + node_relu_5",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.0365,
+      "category": "compute-bound",
+      "pct_of_total": 1.58
+    },
+    {
+      "index": 72,
+      "name": "node_Conv_848 + node_relu_43",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x32x64_stage4_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.03555,
+      "category": "compute-bound",
+      "pct_of_total": 1.54
+    },
+    {
+      "index": 36,
+      "name": "node_Conv_802 + node_relu_22",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.03464,
+      "category": "compute-bound",
+      "pct_of_total": 1.5
+    },
+    {
+      "index": 15,
+      "name": "node_Conv_776 + node_relu_10",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.03245,
+      "category": "compute-bound",
+      "pct_of_total": 1.41
+    },
+    {
+      "index": 43,
+      "name": "node_Conv_814 + node_add_723 + node_relu_27",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.0241,
+      "category": "compute-bound",
+      "pct_of_total": 1.04
+    },
+    {
+      "index": 53,
+      "name": "node_Conv_826 + node_add_875 + node_relu_33",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02398,
+      "category": "compute-bound",
+      "pct_of_total": 1.04
+    },
+    {
+      "index": 38,
+      "name": "node_Conv_806 + node_add_647 + node_relu_24",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02396,
+      "category": "compute-bound",
+      "pct_of_total": 1.04
+    },
+    {
+      "index": 63,
+      "name": "node_Conv_838 + node_add_1027 + node_relu_39",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.0239,
+      "category": "compute-bound",
+      "pct_of_total": 1.03
+    },
+    {
+      "index": 58,
+      "name": "node_Conv_832 + node_add_951 + node_relu_36",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02384,
+      "category": "compute-bound",
+      "pct_of_total": 1.03
+    },
+    {
+      "index": 48,
+      "name": "node_Conv_820 + node_add_799 + node_relu_30",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02383,
+      "category": "compute-bound",
+      "pct_of_total": 1.03
+    },
+    {
+      "index": 39,
+      "name": "node_Conv_810 + node_relu_25",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02373,
+      "category": "compute-bound",
+      "pct_of_total": 1.03
+    },
+    {
+      "index": 59,
+      "name": "node_Conv_834 + node_relu_37",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.0236,
+      "category": "compute-bound",
+      "pct_of_total": 1.02
+    },
+    {
+      "index": 49,
+      "name": "node_Conv_822 + node_relu_31",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02348,
+      "category": "compute-bound",
+      "pct_of_total": 1.02
+    },
+    {
+      "index": 44,
+      "name": "node_Conv_816 + node_relu_28",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02343,
+      "category": "compute-bound",
+      "pct_of_total": 1.01
+    },
+    {
+      "index": 8,
+      "name": "node_Conv_764 + node_relu_4",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.02341,
+      "category": "compute-bound",
+      "pct_of_total": 1.01
+    },
+    {
+      "index": 54,
+      "name": "node_Conv_828 + node_relu_34",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02336,
+      "category": "compute-bound",
+      "pct_of_total": 1.01
+    },
+    {
+      "index": 11,
+      "name": "node_Conv_770 + node_relu_7",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8",
+      "avg_ms": 0.02275,
+      "category": "compute-bound",
+      "pct_of_total": 0.99
+    },
+    {
+      "index": 30,
+      "name": "node_Conv_796 + node_relu_19",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02243,
+      "category": "compute-bound",
+      "pct_of_total": 0.97
+    },
+    {
+      "index": 20,
+      "name": "node_Conv_784 + node_relu_13",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02231,
+      "category": "compute-bound",
+      "pct_of_total": 0.97
+    },
+    {
+      "index": 25,
+      "name": "node_Conv_790 + node_relu_16",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02229,
+      "category": "compute-bound",
+      "pct_of_total": 0.97
+    },
+    {
+      "index": 7,
+      "name": "node_Conv_762 + node_add_95 + node_relu_3",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.02107,
+      "category": "compute-bound",
+      "pct_of_total": 0.91
+    },
+    {
+      "index": 10,
+      "name": "node_Conv_768 + node_add_171 + node_relu_6",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.021,
+      "category": "compute-bound",
+      "pct_of_total": 0.91
+    },
+    {
+      "index": 19,
+      "name": "node_Conv_780 + node_add_333 + node_relu_12",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02099,
+      "category": "compute-bound",
+      "pct_of_total": 0.91
+    },
+    {
+      "index": 13,
+      "name": "node_Conv_774 + node_add_247 + node_relu_9",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.02098,
+      "category": "compute-bound",
+      "pct_of_total": 0.91
+    },
+    {
+      "index": 29,
+      "name": "node_Conv_794 + node_add_485 + node_relu_18",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02087,
+      "category": "compute-bound",
+      "pct_of_total": 0.9
+    },
+    {
+      "index": 24,
+      "name": "node_Conv_788 + node_add_409 + node_relu_15",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02086,
+      "category": "compute-bound",
+      "pct_of_total": 0.9
+    },
+    {
+      "index": 34,
+      "name": "node_Conv_800 + node_add_561 + node_relu_21",
+      "type": "CaskGemmConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8",
+      "avg_ms": 0.02079,
+      "category": "compute-bound",
+      "pct_of_total": 0.9
+    },
+    {
+      "index": 6,
+      "name": "node_Conv_760",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.01998,
+      "category": "compute-bound",
+      "pct_of_total": 0.87
+    },
+    {
+      "index": 0,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_754 + node_relu",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.01722,
+      "category": "memory-bound",
+      "pct_of_total": 0.75
+    },
+    {
+      "index": 3,
+      "name": "node_max_pool2d",
+      "type": "CaskPooling",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_pooling_max_nhwc_FP32FP32_WINDOWSIZE_3_NOT_PROPAGATE_NAN_2D",
+      "avg_ms": 0.01037,
+      "category": "other",
+      "pct_of_total": 0.45
+    },
+    {
+      "index": 4,
+      "name": "node_Conv_756 + node_relu_1",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8",
+      "avg_ms": 0.00968,
+      "category": "compute-bound",
+      "pct_of_total": 0.42
+    },
+    {
+      "index": 82,
+      "name": "node_mean",
+      "type": "CaskPooling",
+      "output_dtype": "Float",
+      "tactic": "sm50_xmma_pooling_fw_4d_FP32FP32NHWC_Average_FastDiv_CAlign4",
+      "avg_ms": 0.00532,
+      "category": "other",
+      "pct_of_total": 0.23
+    },
+    {
+      "index": 23,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_788 + node_add_409 + node_relu_15",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00466,
+      "category": "memory-bound",
+      "pct_of_total": 0.2
+    },
+    {
+      "index": 33,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_800 + node_add_561 + node_relu_21",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0046,
+      "category": "memory-bound",
+      "pct_of_total": 0.2
+    },
+    {
+      "index": 21,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_786 + node_relu_14",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00458,
+      "category": "memory-bound",
+      "pct_of_total": 0.2
+    },
+    {
+      "index": 31,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_798 + node_relu_20",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0045,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 28,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_794 + node_add_485 + node_relu_18",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00447,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 52,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_826 + node_add_875 + node_relu_33",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00444,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 42,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_814 + node_add_723 + node_relu_27",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00442,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 57,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_832 + node_add_951 + node_relu_36",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00442,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 26,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_792 + node_relu_17",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0044,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 62,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_838 + node_add_1027 + node_relu_39",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0044,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 47,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_820 + node_add_799 + node_relu_30",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00437,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 55,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_830 + node_relu_35",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00432,
+      "category": "memory-bound",
+      "pct_of_total": 0.19
+    },
+    {
+      "index": 60,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_836 + node_relu_38",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00426,
+      "category": "memory-bound",
+      "pct_of_total": 0.18
+    },
+    {
+      "index": 40,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_812 + node_relu_26",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00425,
+      "category": "memory-bound",
+      "pct_of_total": 0.18
+    },
+    {
+      "index": 75,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_852 + node_add_1189 + node_relu_45",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00424,
+      "category": "memory-bound",
+      "pct_of_total": 0.18
+    },
+    {
+      "index": 45,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_818 + node_relu_29",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00418,
+      "category": "memory-bound",
+      "pct_of_total": 0.18
+    },
+    {
+      "index": 73,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_850 + node_relu_44",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00418,
+      "category": "memory-bound",
+      "pct_of_total": 0.18
+    },
+    {
+      "index": 50,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_824 + node_relu_32",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00413,
+      "category": "memory-bound",
+      "pct_of_total": 0.18
+    },
+    {
+      "index": 80,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_858 + node_add_1265 + node_relu_48",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00407,
+      "category": "memory-bound",
+      "pct_of_total": 0.18
+    },
+    {
+      "index": 78,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_856 + node_relu_47",
+      "type": "Reformat",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.00399,
+      "category": "memory-bound",
+      "pct_of_total": 0.17
+    },
+    {
+      "index": 2,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_max_pool2d",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 16,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_778 + node_relu_11",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 18,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_780 + node_add_333 + node_relu_12",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 64,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_846",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 67,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_842 + node_relu_41",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 69,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_844 + node_add_1113 + node_relu_42",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 70,
+      "name": "Reformatting CopyNode for Input Tensor 1 to node_Conv_844 + node_add_1113 + node_relu_42",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 83,
+      "name": "Reformatting CopyNode for Input Tensor 0 to {ForeignNode[fc.weight...(Unnamed Layer* 130) [ElementWise]]}",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    }
+  ]
+}

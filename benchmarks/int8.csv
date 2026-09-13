@@ -1,0 +1,24 @@
+metric,value
+precision,int8
+batch_size,1
+input_shape,3x224x224
+latency_ms_mean,0.34716
+throughput_qps,2880.55
+gpu_mem_used_mb,52.0
+engine_size_mb,25.26
+engine_build_time_s,64.78
+engine_build_time_note,reuses the existing calibration.cache (no fresh calibration pass); a cold build with a full calibration pass over 500 real images measured 85.27s previously
+latency_measurement,CUDA-graph capture/replay (execute_async_v3 sequence captured once, replayed per iteration) plus BuilderFlag.DIRECT_IO; both verified bit-identical output vs. the uncaptured/non-DIRECT_IO path
+calibration_dataset,Imagenette2-160 (fast.ai), 500 real JPEGs / 50 per class / 10 classes
+calibration_preprocessing,resize shorter side 256 -> center crop 224 -> normalize (ImageNet mean/std) -> CHW
+calibrator,trt.IInt8EntropyCalibrator2 (custom, TensorRT Python Builder API)
+top1_match_rate_vs_pytorch,0.9375
+mean_abs_diff_vs_pytorch,0.06979414075613022
+max_abs_diff_vs_pytorch,2.396238327026367
+accuracy_eval_batch,32
+accuracy_eval_input,real images (calibration/images, 32 sampled, seed=0)
+accuracy_eval_caveat,the 32 eval images were drawn from the same 500-image calibration pool (no held-out split) - directional check, not a rigorous eval
+hardware,NVIDIA GeForce RTX 4050 Laptop GPU (compute capability 8.9, 6141 MiB total)
+driver_version,580.173.02
+cuda_version,13.0
+tensorrt_version,10.14.1.48.post1

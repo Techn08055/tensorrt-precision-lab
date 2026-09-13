@@ -1,0 +1,764 @@
+{
+  "batch": 1,
+  "iters": 100,
+  "precision": "int8",
+  "num_layers": 58,
+  "total_avg_ms": 1.09667,
+  "time_by_category_ms": {
+    "memory-bound": 0.03567,
+    "compute-bound": 1.05049,
+    "other": 0.01051
+  },
+  "time_by_category_pct": {
+    "memory-bound": 3.25,
+    "compute-bound": 95.79,
+    "other": 0.96
+  },
+  "fallback_layer_count": 2,
+  "fallback_layers": [
+    {
+      "name": "node_linear + (Unnamed Layer* 130) [ElementWise]",
+      "dtype": "Float",
+      "avg_ms": 0.03363
+    },
+    {
+      "name": "reshape_after_node_linear",
+      "dtype": "Float",
+      "avg_ms": 0.0
+    }
+  ],
+  "top_layers": [
+    {
+      "index": 0,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_754 + node_relu + node_max_pool2d",
+      "type": "Reformat",
+      "output_dtype": "Int8",
+      "tactic": null,
+      "avg_ms": 0.03567,
+      "category": "memory-bound",
+      "pct_of_total": 3.25
+    },
+    {
+      "index": 56,
+      "name": "node_linear + (Unnamed Layer* 130) [ElementWise]",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm70_xmma_fprop_conv1x1_i8f32_f32_f32_nchw_vect_c_4kcrs_vect_c_4_nchw_simt_small_batch_bias_relu",
+      "avg_ms": 0.03363,
+      "category": "compute-bound",
+      "pct_of_total": 3.07
+    },
+    {
+      "index": 1,
+      "name": "node_Conv_754 + node_relu + node_max_pool2d",
+      "type": "CaskConvActPool",
+      "output_dtype": "Int8",
+      "tactic": null,
+      "avg_ms": 0.03075,
+      "category": "compute-bound",
+      "pct_of_total": 2.8
+    },
+    {
+      "index": 45,
+      "name": "node_Conv_846",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.03006,
+      "category": "compute-bound",
+      "pct_of_total": 2.74
+    },
+    {
+      "index": 52,
+      "name": "node_Conv_856 + node_relu_47",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x32x64_stage6_warpsize2x1x1_g1_tensor16x8x32",
+      "avg_ms": 0.02986,
+      "category": "compute-bound",
+      "pct_of_total": 2.72
+    },
+    {
+      "index": 49,
+      "name": "node_Conv_850 + node_relu_44",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x32x64_stage6_warpsize2x1x1_g1_tensor16x8x32",
+      "avg_ms": 0.0276,
+      "category": "compute-bound",
+      "pct_of_total": 2.52
+    },
+    {
+      "index": 46,
+      "name": "node_Conv_842 + node_relu_41",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x32x64_stage6_warpsize2x1x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.02248,
+      "category": "compute-bound",
+      "pct_of_total": 2.05
+    },
+    {
+      "index": 3,
+      "name": "node_Conv_758 + node_relu_2",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02226,
+      "category": "compute-bound",
+      "pct_of_total": 2.03
+    },
+    {
+      "index": 30,
+      "name": "node_Conv_812 + node_relu_26",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02198,
+      "category": "compute-bound",
+      "pct_of_total": 2.0
+    },
+    {
+      "index": 4,
+      "name": "node_Conv_760",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm75_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage1_warpsize2x2x1_g1_tensor8x8x16_simple_t1r1s1",
+      "avg_ms": 0.02165,
+      "category": "compute-bound",
+      "pct_of_total": 1.97
+    },
+    {
+      "index": 36,
+      "name": "node_Conv_824 + node_relu_32",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02136,
+      "category": "compute-bound",
+      "pct_of_total": 1.95
+    },
+    {
+      "index": 26,
+      "name": "node_Conv_808",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.02124,
+      "category": "compute-bound",
+      "pct_of_total": 1.94
+    },
+    {
+      "index": 44,
+      "name": "node_Conv_840 + node_relu_40",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.02105,
+      "category": "compute-bound",
+      "pct_of_total": 1.92
+    },
+    {
+      "index": 20,
+      "name": "node_Conv_792 + node_relu_17",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.02069,
+      "category": "compute-bound",
+      "pct_of_total": 1.89
+    },
+    {
+      "index": 13,
+      "name": "node_Conv_782",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x192x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.02067,
+      "category": "compute-bound",
+      "pct_of_total": 1.88
+    }
+  ],
+  "layers": [
+    {
+      "index": 0,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_Conv_754 + node_relu + node_max_pool2d",
+      "type": "Reformat",
+      "output_dtype": "Int8",
+      "tactic": null,
+      "avg_ms": 0.03567,
+      "category": "memory-bound",
+      "pct_of_total": 3.25
+    },
+    {
+      "index": 56,
+      "name": "node_linear + (Unnamed Layer* 130) [ElementWise]",
+      "type": "CaskConvolution",
+      "output_dtype": "Float",
+      "tactic": "sm70_xmma_fprop_conv1x1_i8f32_f32_f32_nchw_vect_c_4kcrs_vect_c_4_nchw_simt_small_batch_bias_relu",
+      "avg_ms": 0.03363,
+      "category": "compute-bound",
+      "pct_of_total": 3.07
+    },
+    {
+      "index": 1,
+      "name": "node_Conv_754 + node_relu + node_max_pool2d",
+      "type": "CaskConvActPool",
+      "output_dtype": "Int8",
+      "tactic": null,
+      "avg_ms": 0.03075,
+      "category": "compute-bound",
+      "pct_of_total": 2.8
+    },
+    {
+      "index": 45,
+      "name": "node_Conv_846",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.03006,
+      "category": "compute-bound",
+      "pct_of_total": 2.74
+    },
+    {
+      "index": 52,
+      "name": "node_Conv_856 + node_relu_47",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x32x64_stage6_warpsize2x1x1_g1_tensor16x8x32",
+      "avg_ms": 0.02986,
+      "category": "compute-bound",
+      "pct_of_total": 2.72
+    },
+    {
+      "index": 49,
+      "name": "node_Conv_850 + node_relu_44",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x32x64_stage6_warpsize2x1x1_g1_tensor16x8x32",
+      "avg_ms": 0.0276,
+      "category": "compute-bound",
+      "pct_of_total": 2.52
+    },
+    {
+      "index": 46,
+      "name": "node_Conv_842 + node_relu_41",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x32x64_stage6_warpsize2x1x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.02248,
+      "category": "compute-bound",
+      "pct_of_total": 2.05
+    },
+    {
+      "index": 3,
+      "name": "node_Conv_758 + node_relu_2",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02226,
+      "category": "compute-bound",
+      "pct_of_total": 2.03
+    },
+    {
+      "index": 30,
+      "name": "node_Conv_812 + node_relu_26",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02198,
+      "category": "compute-bound",
+      "pct_of_total": 2.0
+    },
+    {
+      "index": 4,
+      "name": "node_Conv_760",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm75_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage1_warpsize2x2x1_g1_tensor8x8x16_simple_t1r1s1",
+      "avg_ms": 0.02165,
+      "category": "compute-bound",
+      "pct_of_total": 1.97
+    },
+    {
+      "index": 36,
+      "name": "node_Conv_824 + node_relu_32",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02136,
+      "category": "compute-bound",
+      "pct_of_total": 1.95
+    },
+    {
+      "index": 26,
+      "name": "node_Conv_808",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.02124,
+      "category": "compute-bound",
+      "pct_of_total": 1.94
+    },
+    {
+      "index": 44,
+      "name": "node_Conv_840 + node_relu_40",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.02105,
+      "category": "compute-bound",
+      "pct_of_total": 1.92
+    },
+    {
+      "index": 20,
+      "name": "node_Conv_792 + node_relu_17",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.02069,
+      "category": "compute-bound",
+      "pct_of_total": 1.89
+    },
+    {
+      "index": 13,
+      "name": "node_Conv_782",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x192x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.02067,
+      "category": "compute-bound",
+      "pct_of_total": 1.88
+    },
+    {
+      "index": 33,
+      "name": "node_Conv_818 + node_relu_29",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02056,
+      "category": "compute-bound",
+      "pct_of_total": 1.87
+    },
+    {
+      "index": 39,
+      "name": "node_Conv_830 + node_relu_35",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02055,
+      "category": "compute-bound",
+      "pct_of_total": 1.87
+    },
+    {
+      "index": 8,
+      "name": "node_Conv_768 + node_add_171 + node_relu_6",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm75_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage1_warpsize2x2x1_g1_tensor8x8x16_simple_t1r1s1",
+      "avg_ms": 0.02052,
+      "category": "compute-bound",
+      "pct_of_total": 1.87
+    },
+    {
+      "index": 14,
+      "name": "node_Conv_778 + node_relu_11",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.02022,
+      "category": "compute-bound",
+      "pct_of_total": 1.84
+    },
+    {
+      "index": 42,
+      "name": "node_Conv_836 + node_relu_38",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.02014,
+      "category": "compute-bound",
+      "pct_of_total": 1.84
+    },
+    {
+      "index": 29,
+      "name": "node_Conv_810 + node_relu_25",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.02013,
+      "category": "compute-bound",
+      "pct_of_total": 1.84
+    },
+    {
+      "index": 27,
+      "name": "node_Conv_804 + node_relu_23",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.02006,
+      "category": "compute-bound",
+      "pct_of_total": 1.83
+    },
+    {
+      "index": 17,
+      "name": "node_Conv_786 + node_relu_14",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.0199,
+      "category": "compute-bound",
+      "pct_of_total": 1.81
+    },
+    {
+      "index": 16,
+      "name": "node_Conv_784 + node_relu_13",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32",
+      "avg_ms": 0.0198,
+      "category": "compute-bound",
+      "pct_of_total": 1.81
+    },
+    {
+      "index": 5,
+      "name": "node_Conv_762 + node_add_95 + node_relu_3",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm75_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage1_warpsize2x2x1_g1_tensor8x8x16_simple_t1r1s1",
+      "avg_ms": 0.0197,
+      "category": "compute-bound",
+      "pct_of_total": 1.8
+    },
+    {
+      "index": 11,
+      "name": "node_Conv_774 + node_add_247 + node_relu_9",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm75_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage1_warpsize2x2x1_g1_tensor8x8x16_simple_t1r1s1",
+      "avg_ms": 0.01959,
+      "category": "compute-bound",
+      "pct_of_total": 1.79
+    },
+    {
+      "index": 12,
+      "name": "node_Conv_776 + node_relu_10",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x128x64_stage3_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01958,
+      "category": "compute-bound",
+      "pct_of_total": 1.79
+    },
+    {
+      "index": 23,
+      "name": "node_Conv_798 + node_relu_20",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r3s3",
+      "avg_ms": 0.01952,
+      "category": "compute-bound",
+      "pct_of_total": 1.78
+    },
+    {
+      "index": 10,
+      "name": "node_Conv_772 + node_relu_8",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.01906,
+      "category": "compute-bound",
+      "pct_of_total": 1.74
+    },
+    {
+      "index": 32,
+      "name": "node_Conv_816 + node_relu_28",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01791,
+      "category": "compute-bound",
+      "pct_of_total": 1.63
+    },
+    {
+      "index": 38,
+      "name": "node_Conv_828 + node_relu_34",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01782,
+      "category": "compute-bound",
+      "pct_of_total": 1.62
+    },
+    {
+      "index": 7,
+      "name": "node_Conv_766 + node_relu_5",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_avdt_dense_int8int8_tilesize64x64x32_tapsperload3_threadspercta128_r3s3_u1v1_scalebias_relu",
+      "avg_ms": 0.0177,
+      "category": "compute-bound",
+      "pct_of_total": 1.61
+    },
+    {
+      "index": 40,
+      "name": "node_Conv_832 + node_add_951 + node_relu_36",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01745,
+      "category": "compute-bound",
+      "pct_of_total": 1.59
+    },
+    {
+      "index": 35,
+      "name": "node_Conv_822 + node_relu_31",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01742,
+      "category": "compute-bound",
+      "pct_of_total": 1.59
+    },
+    {
+      "index": 41,
+      "name": "node_Conv_834 + node_relu_37",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01736,
+      "category": "compute-bound",
+      "pct_of_total": 1.58
+    },
+    {
+      "index": 24,
+      "name": "node_Conv_800 + node_add_561 + node_relu_21",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x128x64_stage3_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.0173,
+      "category": "compute-bound",
+      "pct_of_total": 1.58
+    },
+    {
+      "index": 25,
+      "name": "node_Conv_802 + node_relu_22",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x128x64_stage3_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.0173,
+      "category": "compute-bound",
+      "pct_of_total": 1.58
+    },
+    {
+      "index": 19,
+      "name": "node_Conv_790 + node_relu_16",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32",
+      "avg_ms": 0.017,
+      "category": "compute-bound",
+      "pct_of_total": 1.55
+    },
+    {
+      "index": 6,
+      "name": "node_Conv_764 + node_relu_4",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize192x64x64_stage3_warpsize4x1x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01698,
+      "category": "compute-bound",
+      "pct_of_total": 1.55
+    },
+    {
+      "index": 22,
+      "name": "node_Conv_796 + node_relu_19",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x64x64_stage3_warpsize2x2x1_g1_tensor16x8x32",
+      "avg_ms": 0.01692,
+      "category": "compute-bound",
+      "pct_of_total": 1.54
+    },
+    {
+      "index": 34,
+      "name": "node_Conv_820 + node_add_799 + node_relu_30",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.0168,
+      "category": "compute-bound",
+      "pct_of_total": 1.53
+    },
+    {
+      "index": 28,
+      "name": "node_Conv_806 + node_add_647 + node_relu_24",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01675,
+      "category": "compute-bound",
+      "pct_of_total": 1.53
+    },
+    {
+      "index": 18,
+      "name": "node_Conv_788 + node_add_409 + node_relu_15",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x128x64_stage3_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01661,
+      "category": "compute-bound",
+      "pct_of_total": 1.51
+    },
+    {
+      "index": 21,
+      "name": "node_Conv_794 + node_add_485 + node_relu_18",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x128x64_stage3_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01654,
+      "category": "compute-bound",
+      "pct_of_total": 1.51
+    },
+    {
+      "index": 37,
+      "name": "node_Conv_826 + node_add_875 + node_relu_33",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01625,
+      "category": "compute-bound",
+      "pct_of_total": 1.48
+    },
+    {
+      "index": 15,
+      "name": "node_Conv_780 + node_add_333 + node_relu_12",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x128x64_stage3_warpsize2x2x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.0161,
+      "category": "compute-bound",
+      "pct_of_total": 1.47
+    },
+    {
+      "index": 43,
+      "name": "node_Conv_838 + node_add_1027 + node_relu_39",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.0161,
+      "category": "compute-bound",
+      "pct_of_total": 1.47
+    },
+    {
+      "index": 31,
+      "name": "node_Conv_814 + node_add_723 + node_relu_27",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize48x128x64_stage3_warpsize1x4x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01603,
+      "category": "compute-bound",
+      "pct_of_total": 1.46
+    },
+    {
+      "index": 2,
+      "name": "node_Conv_756 + node_relu_1",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm75_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x64x64_stage1_warpsize2x2x1_g1_tensor8x8x16_simple_t1r1s1",
+      "avg_ms": 0.0158,
+      "category": "compute-bound",
+      "pct_of_total": 1.44
+    },
+    {
+      "index": 48,
+      "name": "node_Conv_848 + node_relu_43",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.01568,
+      "category": "compute-bound",
+      "pct_of_total": 1.43
+    },
+    {
+      "index": 51,
+      "name": "node_Conv_854 + node_relu_46",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.01498,
+      "category": "compute-bound",
+      "pct_of_total": 1.37
+    },
+    {
+      "index": 9,
+      "name": "node_Conv_770 + node_relu_7",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize192x64x64_stage3_warpsize4x1x1_g1_tensor16x8x32_simple_t1r1s1",
+      "avg_ms": 0.01476,
+      "category": "compute-bound",
+      "pct_of_total": 1.35
+    },
+    {
+      "index": 53,
+      "name": "node_Conv_858 + node_add_1265 + node_relu_48",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.01432,
+      "category": "compute-bound",
+      "pct_of_total": 1.31
+    },
+    {
+      "index": 47,
+      "name": "node_Conv_844 + node_add_1113 + node_relu_42",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.01402,
+      "category": "compute-bound",
+      "pct_of_total": 1.28
+    },
+    {
+      "index": 50,
+      "name": "node_Conv_852 + node_add_1189 + node_relu_45",
+      "type": "CaskConvolution",
+      "output_dtype": "Int8",
+      "tactic": "sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x128x64_stage6_warpsize2x2x1_g1_tensor16x8x32_t1r1s1",
+      "avg_ms": 0.01398,
+      "category": "compute-bound",
+      "pct_of_total": 1.27
+    },
+    {
+      "index": 54,
+      "name": "node_mean",
+      "type": "CaskPooling",
+      "output_dtype": "Int8",
+      "tactic": "sm72_xmma_pooling_IMMA_NCxHW32_gap",
+      "avg_ms": 0.01051,
+      "category": "other",
+      "pct_of_total": 0.96
+    },
+    {
+      "index": 55,
+      "name": "Reformatting CopyNode for Input Tensor 0 to node_linear + (Unnamed Layer* 130) [ElementWise]",
+      "type": "NoOp",
+      "output_dtype": "Int8",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    },
+    {
+      "index": 57,
+      "name": "reshape_after_node_linear",
+      "type": "NoOp",
+      "output_dtype": "Float",
+      "tactic": null,
+      "avg_ms": 0.0,
+      "category": "memory-bound",
+      "pct_of_total": 0.0
+    }
+  ]
+}

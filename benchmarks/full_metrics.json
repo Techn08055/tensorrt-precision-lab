@@ -1,0 +1,21 @@
+{
+  "fp32": {
+    "engine_build_time_s": 18.592,
+    "gpu_mem_used_mb": 140.0,
+    "gpu_total_mem_mb": 5770.8,
+    "engine_size_mb": 107.94
+  },
+  "fp16": {
+    "engine_build_time_s": 40.427,
+    "gpu_mem_used_mb": 72.0,
+    "gpu_total_mem_mb": 5770.8,
+    "engine_size_mb": 49.14
+  },
+  "int8": {
+    "engine_build_time_s": 64.78,
+    "engine_build_time_note": "reuses the existing calibration.cache (no fresh calibration pass); a cold build with a full calibration pass over 500 real images measured 85.27s previously",
+    "gpu_mem_used_mb": 52.0,
+    "gpu_total_mem_mb": 5770.8,
+    "engine_size_mb": 25.26
+  }
+}
