@@ -354,25 +354,25 @@ python build_selective_int8.py
 
 # contiguous (a consecutive 3-block run within one stage)
 python build_selective_int8.py --blocks layer3.3 layer3.4 layer3.5 \
-  --engine ../selective_int8/resnet50_selective_int8_contiguous.engine \
+  --engine ../resnet/selective_int8/resnet50_selective_int8_contiguous.engine \
   --meta-out ../profiling/selective_int8_contiguous_meta.json
 
-python verify_accuracy_venv.py --engines ../fp16/resnet50_fp16.engine \
-  ../selective_int8/resnet50_selective_int8.engine \
-  ../selective_int8/resnet50_selective_int8_contiguous.engine \
-  ../int8/resnet50_int8.engine --batch 64 \
+python verify_accuracy_venv.py --engines ../resnet/fp16/resnet50_fp16.engine \
+  ../resnet/selective_int8/resnet50_selective_int8.engine \
+  ../resnet/selective_int8/resnet50_selective_int8_contiguous.engine \
+  ../resnet/int8/resnet50_int8.engine --batch 64 \
   --results-file ../benchmarks/selective_int8_contiguous_accuracy.json
 
 # head-FP16 (only stem + layer1.0 stay FP16, everything else INT8)
 python build_selective_int8.py \
   --blocks layer1.1 layer1.2 layer2.0 layer2.1 layer2.2 layer2.3 layer3.0 layer3.1 \
   layer3.2 layer3.3 layer3.4 layer3.5 layer4.0 layer4.1 layer4.2 \
-  --engine ../selective_int8/resnet50_selective_int8_headfp16.engine \
+  --engine ../resnet/selective_int8/resnet50_selective_int8_headfp16.engine \
   --meta-out ../profiling/selective_int8_headfp16_meta.json
 
-python verify_accuracy_venv.py --engines ../fp16/resnet50_fp16.engine \
-  ../selective_int8/resnet50_selective_int8_headfp16.engine \
-  ../int8/resnet50_int8.engine --batch 64 \
+python verify_accuracy_venv.py --engines ../resnet/fp16/resnet50_fp16.engine \
+  ../resnet/selective_int8/resnet50_selective_int8_headfp16.engine \
+  ../resnet/int8/resnet50_int8.engine --batch 64 \
   --results-file ../benchmarks/selective_int8_headfp16_accuracy.json
 ```
 

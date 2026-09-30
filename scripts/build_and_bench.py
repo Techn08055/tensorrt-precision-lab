@@ -152,9 +152,9 @@ def main():
     args = ap.parse_args()
 
     engines = {
-        "fp32": ("../fp32/resnet50_fp32.engine", "fp32"),
-        "fp16": ("../fp16/resnet50_fp16.engine", "fp16"),
-        "int8": ("../int8/resnet50_int8.engine", "int8-existing"),
+        "fp32": ("../resnet/fp32/resnet50_fp32.engine", "fp32"),
+        "fp16": ("../resnet/fp16/resnet50_fp16.engine", "fp16"),
+        "int8": ("../resnet/int8/resnet50_int8.engine", "int8-existing"),
     }
 
     results = {}

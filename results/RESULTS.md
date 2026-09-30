@@ -113,7 +113,7 @@ python verify_accuracy_venv.py
 python measure_full_metrics.py
 ```
 
-(all scripts default to the sibling `models/`, `fp32/`, `fp16/`, `int8/`, `calibration/`, `benchmarks/` directories)
+(all scripts default to the sibling `models/`, `resnet/fp32/`, `resnet/fp16/`, `resnet/int8/`, `calibration/`, `benchmarks/` directories)
 
 Note: `export_onnx_to_trt.py` in `scripts/` is the original `trtexec`-subprocess-based
 builder and is kept for reference, but it is version-fragile — if the system `trtexec`

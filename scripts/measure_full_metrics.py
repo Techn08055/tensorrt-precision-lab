@@ -92,9 +92,9 @@ def main():
     print("(INT8 build time measured separately by calibrate_int8.py's own run; see progress log)")
 
     for name, engine_file in [
-        ("fp32", "../fp32/resnet50_fp32.engine"),
-        ("fp16", "../fp16/resnet50_fp16.engine"),
-        ("int8", "../int8/resnet50_int8.engine"),
+        ("fp32", "../resnet/fp32/resnet50_fp32.engine"),
+        ("fp16", "../resnet/fp16/resnet50_fp16.engine"),
+        ("int8", "../resnet/int8/resnet50_int8.engine"),
     ]:
         used_mb, total_mb = gpu_mem_during_inference(engine_file)
         metrics.setdefault(name, {})["gpu_mem_used_mb"] = used_mb
@@ -102,9 +102,9 @@ def main():
         print(f"{name}: GPU memory used during inference = {used_mb} MB (of {total_mb} MB total)")
 
     for name, engine_file in [
-        ("fp32", "../fp32/resnet50_fp32.engine"),
-        ("fp16", "../fp16/resnet50_fp16.engine"),
-        ("int8", "../int8/resnet50_int8.engine"),
+        ("fp32", "../resnet/fp32/resnet50_fp32.engine"),
+        ("fp16", "../resnet/fp16/resnet50_fp16.engine"),
+        ("int8", "../resnet/int8/resnet50_int8.engine"),
     ]:
         metrics.setdefault(name, {})["engine_size_mb"] = round(os.path.getsize(engine_file) / (1024 * 1024), 2)
 

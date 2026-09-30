@@ -15,24 +15,17 @@ Thumbs.db
 models/*.onnx
 models/*.onnx.data
 models/*.pth
-fp32/*.engine
-fp16/*.engine
-int8/*.engine
+resnet/fp32/*.engine
+resnet/fp16/*.engine
+resnet/int8/*.engine
+resnet/selective_int8/*.engine
 calibration/calibration.cache
 
 # Large binary Nsight traces — the small *_cuda_gpu_kern_sum.csv summaries are kept, they're the actual cited evidence
 profiling/nsys/*.nsys-rep
 
-# Video production assets: a separate Remotion project (video/) that already has its own
-# git repo and .gitignore, plus the raw narration audio. Not part of the TensorRT experiment.
-video/
+# Video production: each videos/NN_.../ is a separate Remotion project (its own git repo
+# and .gitignore) plus dossier/storyboard/script/planning docs and raw narration audio.
+# Not part of the TensorRT/CUDA experiment side of this repo.
+videos/
 audio/
-
-# Video planning docs (dossier/storyboard/script/metadata/thumbnail, Remotion component notes) —
-# belong to the video-production side of this project, not the ML experiment itself.
-video_dossier.md
-video_storyboard.md
-video_script.md
-video_metadata.md
-video_thumbnail.md
-remotion_components.md

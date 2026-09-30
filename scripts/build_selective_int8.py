@@ -78,7 +78,7 @@ def build_selective_engine(onnx_path, engine_path, safe_blocks, workspace_mb, ca
 def main():
     ap = argparse.ArgumentParser(description="Build a selective (block-level) INT8 ResNet50 engine")
     ap.add_argument("--onnx", default="../models/resnet50.onnx")
-    ap.add_argument("--engine", default="../selective_int8/resnet50_selective_int8.engine")
+    ap.add_argument("--engine", default="../resnet/selective_int8/resnet50_selective_int8.engine")
     ap.add_argument("--calib-images", default="../calibration/images")
     ap.add_argument("--calib-cache", default="../calibration/calibration.cache")
     ap.add_argument("--workspace-mb", type=int, default=2048)

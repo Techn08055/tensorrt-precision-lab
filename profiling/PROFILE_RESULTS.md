@@ -12,7 +12,7 @@ Two independent measurements, cross-checked against each other:
    latency, but the *relative* per-layer/per-category split is meaningful. Raw data:
    `layer_profile_fp32.json`, `layer_profile_fp16.json`, `layer_profile_int8.json`.
 2. **Nsight Systems CUDA kernel trace** (`scripts/nsys_run_engine.py`, run under `nsys profile`) —
-   traces the actual, already-benchmarked engines (`../fp32/`, `../fp16/`, `../int8/`) with no TensorRT
+   traces the actual, already-benchmarked engines (`../resnet/fp32/`, `../resnet/fp16/`, `../resnet/int8/`) with no TensorRT
    instrumentation in the loop, so it reproduces true unblocked latency and gives ground-truth kernel
    names/durations. Raw data: `nsys/{fp32,fp16,int8}.nsys-rep`, `nsys/{fp32,fp16,int8}_cuda_gpu_kern_sum.csv`.
 
@@ -121,15 +121,15 @@ compute layers get faster it becomes proportionally more visible — even though
 ```bash
 cd scripts
 python profile_layers.py     # rebuilds fp32/fp16/int8 with DETAILED verbosity, per-layer timing + precision
-nsys profile --trace=cuda --force-overwrite=true -o ../profiling/nsys/fp32 -- python nsys_run_engine.py --engine ../fp32/resnet50_fp32.engine --iters 300
-nsys profile --trace=cuda --force-overwrite=true -o ../profiling/nsys/fp16 -- python nsys_run_engine.py --engine ../fp16/resnet50_fp16.engine --iters 300
-nsys profile --trace=cuda --force-overwrite=true -o ../profiling/nsys/int8 -- python nsys_run_engine.py --engine ../int8/resnet50_int8.engine --iters 300
+nsys profile --trace=cuda --force-overwrite=true -o ../profiling/nsys/fp32 -- python nsys_run_engine.py --engine ../resnet/fp32/resnet50_fp32.engine --iters 300
+nsys profile --trace=cuda --force-overwrite=true -o ../profiling/nsys/fp16 -- python nsys_run_engine.py --engine ../resnet/fp16/resnet50_fp16.engine --iters 300
+nsys profile --trace=cuda --force-overwrite=true -o ../profiling/nsys/int8 -- python nsys_run_engine.py --engine ../resnet/int8/resnet50_int8.engine --iters 300
 nsys stats --report cuda_gpu_kern_sum --format csv --output ../profiling/nsys ../profiling/nsys/fp32.nsys-rep
 # (repeat nsys stats for fp16.nsys-rep and int8.nsys-rep)
 ```
 
-`profile_layers.py` rebuilds engines rather than reusing the ones under `../fp32/`, `../fp16/`,
-`../int8/`: those were built by a different Python `tensorrt` package version than the system
+`profile_layers.py` rebuilds engines rather than reusing the ones under `../resnet/fp32/`,
+`../resnet/fp16/`, `../resnet/int8/`: those were built by a different Python `tensorrt` package version than the system
 `trtexec`, and per the version-lock lesson in the main README, only the same TensorRT Python API that
 built them can deserialize them. `nsys_run_engine.py` sidesteps that entirely by loading the original
 benchmarked engines directly — Nsight Systems traces CUDA calls, not TensorRT internals, so it has no

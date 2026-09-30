@@ -154,7 +154,7 @@ def main():
         description="Build an INT8 TensorRT engine from an ONNX model, calibrated on real images"
     )
     parser.add_argument("--onnx", default="../models/resnet50.onnx")
-    parser.add_argument("--engine", default="../int8/resnet50_int8.engine")
+    parser.add_argument("--engine", default="../resnet/int8/resnet50_int8.engine")
     parser.add_argument("--calib-images", default="../calibration/images")
     parser.add_argument("--calib-cache", default="../calibration/calibration.cache")
     parser.add_argument("--calib-batch-size", type=int, default=8)

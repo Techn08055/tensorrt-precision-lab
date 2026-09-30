@@ -98,7 +98,7 @@ def run_engine_per_sample(engine_path, x):
 def main():
     ap = argparse.ArgumentParser(description="Compare TensorRT engine outputs against the PyTorch reference")
     ap.add_argument("--weights", default="../models/resnet50.pth")
-    ap.add_argument("--engines", nargs="+", default=["../fp32/resnet50_fp32.engine", "../fp16/resnet50_fp16.engine", "../int8/resnet50_int8.engine"])
+    ap.add_argument("--engines", nargs="+", default=["../resnet/fp32/resnet50_fp32.engine", "../resnet/fp16/resnet50_fp16.engine", "../resnet/int8/resnet50_int8.engine"])
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--results-file", default="../benchmarks/accuracy_results.json")

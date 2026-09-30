@@ -1,4 +1,41 @@
-# TensorRT Precision Lab
+# AI Inference Performance Lab — ResNet50
+
+A reproducible investigation into how ResNet50 inference actually executes on a GPU —
+from CUDA kernels up through TensorRT, precision, and fusion. One model, one GPU,
+throughout. Started as a TensorRT FP32/FP16/INT8 precision experiment; growing toward
+CUDA kernel work (GEMM, Conv2D) underneath it as the same model, same measurements.
+
+## Research questions
+
+| # | Question | Where | Status |
+|---|---|---|---|
+| 01 | How does GEMM execute on a GPU? | [`gemm/`](gemm/) | not started |
+| 02 | How does a ResNet convolution map to GEMM? | [`conv/`](conv/) | not started |
+| 03 | What does FP32→FP16→INT8 cost and save? | [`resnet/`](resnet/), this file below | done ([video 1](videos/01_fp32_fp16_int8/)) |
+| 04 | What does TensorRT fuse, and is there more to fuse? | [`profiling/`](profiling/) | done |
+| 05 | Can quantizing only the safe layers keep INT8's speed? | [`profiling/INT8_SENSITIVITY_SWEEP.md`](profiling/INT8_SENSITIVITY_SWEEP.md) | done ([video 2](videos/02_mixed_precision/)) |
+| 06 | What actually dominates ResNet inference at batch=1? | [`profiling/PROFILE_RESULTS.md`](profiling/PROFILE_RESULTS.md) | done |
+| 07 | How does any of this change at batch>1? | — | open |
+
+## Repository map
+
+```
+resnet/           completed engines: fp32/, fp16/, int8/, selective_int8/ (questions 03, 05, 06)
+gemm/             CUDA GEMM kernel lab (question 01) -- not started
+conv/             CUDA Conv2D kernel lab (question 02) -- not started, depends on gemm/
+models/           ResNet50 weights + ONNX export
+calibration/      INT8 calibration cache + images
+scripts/          build / benchmark / calibrate / profile / sweep -- one script per step
+benchmarks/       raw measured numbers (csv/json)
+profiling/        per-layer timing, Nsight traces, the sensitivity-sweep + fusion writeups
+results/          the narrative writeup of the fp32/fp16/int8 results below
+videos/           two-part video documentary built from this lab:
+                    01_fp32_fp16_int8/  -- this precision module
+                    02_mixed_precision/ -- the sensitivity-sweep/fusion follow-up
+```
+
+Everything below this point documents the **FP32/FP16/INT8 module** (question 03 above,
+the first and so far most complete piece of the lab).
 
 ## Question
 
@@ -111,12 +148,12 @@ DIRECT_IO investigation: [`results/RESULTS.md`](results/RESULTS.md#optimizations
 cd scripts
 python export.py                 # PyTorch -> ../models/resnet50.onnx
 python build_and_bench.py        # builds fp32/fp16, benchmarks all three engines
-python calibrate_int8.py         # builds ../int8/resnet50_int8.engine from ../calibration/images
+python calibrate_int8.py         # builds ../resnet/int8/resnet50_int8.engine from ../calibration/images
 python verify_accuracy_venv.py   # accuracy check vs PyTorch reference, 32 real images
 python measure_full_metrics.py   # engine build time, size, GPU memory footprint
 ```
 
-All scripts default to reading/writing the sibling `models/`, `fp32/`, `fp16/`, `int8/`, `calibration/`, and `benchmarks/` directories — run them from `scripts/` with no extra arguments, or pass flags to override any path.
+All scripts default to reading/writing the sibling `models/`, `resnet/fp32/`, `resnet/fp16/`, `resnet/int8/`, `calibration/`, and `benchmarks/` directories — run them from `scripts/` with no extra arguments, or pass flags to override any path.
 
 Requires a working NVIDIA driver + `nvidia-smi`, and `pip install tensorrt torch torchvision pillow numpy cuda-python` in your environment.
 
