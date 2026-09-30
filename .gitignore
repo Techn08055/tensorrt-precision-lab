@@ -27,3 +27,12 @@ profiling/nsys/*.nsys-rep
 # git repo and .gitignore, plus the raw narration audio. Not part of the TensorRT experiment.
 video/
 audio/
+
+# Video planning docs (dossier/storyboard/script/metadata/thumbnail, Remotion component notes) —
+# belong to the video-production side of this project, not the ML experiment itself.
+video_dossier.md
+video_storyboard.md
+video_script.md
+video_metadata.md
+video_thumbnail.md
+remotion_components.md
