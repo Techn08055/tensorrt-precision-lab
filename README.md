@@ -9,7 +9,7 @@ CUDA kernel work (GEMM, Conv2D) underneath it as the same model, same measuremen
 
 | # | Question | Where | Status |
 |---|---|---|---|
-| 01 | How does GEMM execute on a GPU? | [`gemm/`](gemm/) | not started |
+| 01 | How does GEMM execute on a GPU? | [`gemm/`](gemm/) | in progress — mental model + naive-kernel spec done, kernel not yet written |
 | 02 | How does a ResNet convolution map to GEMM? | [`conv/`](conv/) | not started |
 | 03 | What does FP32→FP16→INT8 cost and save? | [`resnet/`](resnet/), this file below | done ([video 1](videos/01_fp32_fp16_int8/)) |
 | 04 | What does TensorRT fuse, and is there more to fuse? | [`profiling/`](profiling/) | done |

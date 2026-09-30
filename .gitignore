@@ -21,6 +21,9 @@ resnet/int8/*.engine
 resnet/selective_int8/*.engine
 calibration/calibration.cache
 
+# Compiled CUDA binaries — rebuild with the nvcc command in each module's docs/README
+gemm/src/gemm_naive
+
 # Large binary Nsight traces — the small *_cuda_gpu_kern_sum.csv summaries are kept, they're the actual cited evidence
 profiling/nsys/*.nsys-rep
 
