@@ -63,6 +63,28 @@ the full 2x; FP16→INT8 only got ~1.7x pre-optimization because at batch=1 many
 sizes are too small to reach peak INT8 tensor-core throughput, and because fixed per-kernel-launch
 CPU overhead doesn't shrink with bit width. See [`profiling/PROFILE_RESULTS.md`](profiling/PROFILE_RESULTS.md).
 
+## Follow-up: does per-block INT8 sensitivity analysis buy anything?
+
+Done. Since full INT8 costs real accuracy (93.75% top-1) and FP16→INT8's speedup
+already shrinks at batch=1, tested whether quantizing only the layers that don't
+hurt accuracy (found via a per-block sensitivity sweep, comparing each candidate
+block's INT8 output back to an all-FP16 baseline) could keep most of INT8's speed
+while paying less of its accuracy cost. First answer: small selective-INT8
+engines (9-16 of 53 conv layers, picked by accuracy sensitivity alone) get the
+accuracy part mostly right — but no speed: TensorRT inserts extra reformat
+layers at each FP16↔INT8 boundary (1 in FP16, 10 in a 5-block scattered
+selective engine) and their cost cancels the INT8 compute saving. The fix:
+stop scattering INT8 in small islands and instead keep only the two most
+sensitive units (stem + first block) pinned to FP16, forcing everything else
+to INT8 — that engine needs just 3 reformat layers and is a real, reproducible
+1.58x faster than FP16, at an accuracy cost between the small engines and full
+INT8. Second finding along the way: the small scattered/contiguous engines
+are **bimodal across identical rebuilds** (TensorRT lands on one of two fixed
+tactics with different accuracy each build) while the head-FP16 engine
+reproduced identically every time — fewer INT8 islands turned out to mean
+more reproducible, not just faster. Full writeup:
+[`profiling/INT8_SENSITIVITY_SWEEP.md`](profiling/INT8_SENSITIVITY_SWEEP.md).
+
 ## Optimization
 
 Done. Two optimizations tested, both verified bit-identical to the unoptimized output:
@@ -107,4 +129,4 @@ Requires a working NVIDIA driver + `nvidia-smi`, and `pip install tensorrt torch
 
 ## Status
 
-FP32, FP16, INT8 builds, benchmarking, accuracy checks, profiling, and optimization (CUDA graphs, DIRECT_IO): done. Pipeline diagram: open, tracked in `diagrams/README.md`.
+FP32, FP16, INT8 builds, benchmarking, accuracy checks, profiling, optimization (CUDA graphs, DIRECT_IO), and per-block INT8 sensitivity sweep + selective-quantization follow-up: done. Pipeline diagram: open, tracked in `diagrams/README.md`. Open follow-up: repeat the selective-INT8 latency test at batch>1, where per-layer problem sizes are large enough that partial quantization might actually beat FP16 (see `profiling/INT8_SENSITIVITY_SWEEP.md`); repeat the INT8 accuracy check against a held-out split disjoint from calibration images.

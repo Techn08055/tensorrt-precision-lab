@@ -1,0 +1,27 @@
+{
+  "blocks_quantized": [
+    "layer2.1",
+    "layer3.0",
+    "layer3.4",
+    "layer3.5",
+    "layer4.1"
+  ],
+  "conv_layers_quantized": [
+    "node_Conv_784",
+    "node_Conv_786",
+    "node_Conv_788",
+    "node_Conv_802",
+    "node_Conv_804",
+    "node_Conv_806",
+    "node_Conv_808",
+    "node_Conv_828",
+    "node_Conv_830",
+    "node_Conv_832",
+    "node_Conv_834",
+    "node_Conv_836",
+    "node_Conv_838",
+    "node_Conv_848",
+    "node_Conv_850",
+    "node_Conv_852"
+  ]
+}

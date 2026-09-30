@@ -1,0 +1,334 @@
+{
+  "batch": 64,
+  "seed": 0,
+  "baseline_top1_vs_pytorch": 1.0,
+  "blocks": {
+    "stem": {
+      "layers": [
+        "node_Conv_754"
+      ],
+      "num_conv_layers": 1,
+      "build_seconds": 19.4,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0781,
+      "mean_abs_logit_diff_vs_baseline": 0.06113,
+      "max_abs_logit_diff_vs_baseline": 3.930826,
+      "top1_vs_pytorch": 0.9219
+    },
+    "layer1.0": {
+      "layers": [
+        "node_Conv_756",
+        "node_Conv_758",
+        "node_Conv_760",
+        "node_Conv_762"
+      ],
+      "num_conv_layers": 4,
+      "build_seconds": 21.9,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0156,
+      "mean_abs_logit_diff_vs_baseline": 0.046617,
+      "max_abs_logit_diff_vs_baseline": 1.898682,
+      "top1_vs_pytorch": 0.9844
+    },
+    "layer1.1": {
+      "layers": [
+        "node_Conv_764",
+        "node_Conv_766",
+        "node_Conv_768"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.3,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0625,
+      "mean_abs_logit_diff_vs_baseline": 0.037978,
+      "max_abs_logit_diff_vs_baseline": 3.79853,
+      "top1_vs_pytorch": 0.9375
+    },
+    "layer1.2": {
+      "layers": [
+        "node_Conv_770",
+        "node_Conv_772",
+        "node_Conv_774"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.0,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0469,
+      "mean_abs_logit_diff_vs_baseline": 0.037658,
+      "max_abs_logit_diff_vs_baseline": 3.791866,
+      "top1_vs_pytorch": 0.9531
+    },
+    "layer2.0": {
+      "layers": [
+        "node_Conv_776",
+        "node_Conv_778",
+        "node_Conv_780",
+        "node_Conv_782"
+      ],
+      "num_conv_layers": 4,
+      "build_seconds": 21.2,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0625,
+      "mean_abs_logit_diff_vs_baseline": 0.038189,
+      "max_abs_logit_diff_vs_baseline": 3.807416,
+      "top1_vs_pytorch": 0.9375
+    },
+    "layer2.1": {
+      "layers": [
+        "node_Conv_784",
+        "node_Conv_786",
+        "node_Conv_788"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.7,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0,
+      "mean_abs_logit_diff_vs_baseline": 0.005964,
+      "max_abs_logit_diff_vs_baseline": 0.372452,
+      "top1_vs_pytorch": 1.0
+    },
+    "layer2.2": {
+      "layers": [
+        "node_Conv_790",
+        "node_Conv_792",
+        "node_Conv_794"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.4,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0469,
+      "mean_abs_logit_diff_vs_baseline": 0.03725,
+      "max_abs_logit_diff_vs_baseline": 3.812352,
+      "top1_vs_pytorch": 0.9531
+    },
+    "layer2.3": {
+      "layers": [
+        "node_Conv_796",
+        "node_Conv_798",
+        "node_Conv_800"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.1,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0469,
+      "mean_abs_logit_diff_vs_baseline": 0.037483,
+      "max_abs_logit_diff_vs_baseline": 3.80322,
+      "top1_vs_pytorch": 0.9531
+    },
+    "layer3.0": {
+      "layers": [
+        "node_Conv_802",
+        "node_Conv_804",
+        "node_Conv_806",
+        "node_Conv_808"
+      ],
+      "num_conv_layers": 4,
+      "build_seconds": 20.7,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0,
+      "mean_abs_logit_diff_vs_baseline": 0.008355,
+      "max_abs_logit_diff_vs_baseline": 0.246094,
+      "top1_vs_pytorch": 1.0
+    },
+    "layer3.1": {
+      "layers": [
+        "node_Conv_810",
+        "node_Conv_812",
+        "node_Conv_814"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.8,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0469,
+      "mean_abs_logit_diff_vs_baseline": 0.037601,
+      "max_abs_logit_diff_vs_baseline": 3.800258,
+      "top1_vs_pytorch": 0.9531
+    },
+    "layer3.2": {
+      "layers": [
+        "node_Conv_816",
+        "node_Conv_818",
+        "node_Conv_820"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.5,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0469,
+      "mean_abs_logit_diff_vs_baseline": 0.037652,
+      "max_abs_logit_diff_vs_baseline": 3.789398,
+      "top1_vs_pytorch": 0.9531
+    },
+    "layer3.3": {
+      "layers": [
+        "node_Conv_822",
+        "node_Conv_824",
+        "node_Conv_826"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.1,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0156,
+      "mean_abs_logit_diff_vs_baseline": 0.0087,
+      "max_abs_logit_diff_vs_baseline": 0.224609,
+      "top1_vs_pytorch": 0.9844
+    },
+    "layer3.4": {
+      "layers": [
+        "node_Conv_828",
+        "node_Conv_830",
+        "node_Conv_832"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.2,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0,
+      "mean_abs_logit_diff_vs_baseline": 0.009139,
+      "max_abs_logit_diff_vs_baseline": 0.269531,
+      "top1_vs_pytorch": 1.0
+    },
+    "layer3.5": {
+      "layers": [
+        "node_Conv_834",
+        "node_Conv_836",
+        "node_Conv_838"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.2,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0,
+      "mean_abs_logit_diff_vs_baseline": 0.008539,
+      "max_abs_logit_diff_vs_baseline": 0.230072,
+      "top1_vs_pytorch": 1.0
+    },
+    "layer4.0": {
+      "layers": [
+        "node_Conv_840",
+        "node_Conv_842",
+        "node_Conv_844",
+        "node_Conv_846"
+      ],
+      "num_conv_layers": 4,
+      "build_seconds": 20.4,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0469,
+      "mean_abs_logit_diff_vs_baseline": 0.039127,
+      "max_abs_logit_diff_vs_baseline": 3.803467,
+      "top1_vs_pytorch": 0.9531
+    },
+    "layer4.1": {
+      "layers": [
+        "node_Conv_848",
+        "node_Conv_850",
+        "node_Conv_852"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.5,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8",
+        "Half"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0,
+      "mean_abs_logit_diff_vs_baseline": 0.014671,
+      "max_abs_logit_diff_vs_baseline": 1.080078,
+      "top1_vs_pytorch": 1.0
+    },
+    "layer4.2": {
+      "layers": [
+        "node_Conv_854",
+        "node_Conv_856",
+        "node_Conv_858"
+      ],
+      "num_conv_layers": 3,
+      "build_seconds": 21.3,
+      "actual_output_dtypes": [
+        "Int8",
+        "Int8",
+        "Int8"
+      ],
+      "flip_rate_vs_fp16_baseline": 0.0625,
+      "mean_abs_logit_diff_vs_baseline": 0.041147,
+      "max_abs_logit_diff_vs_baseline": 3.812599,
+      "top1_vs_pytorch": 0.9375
+    }
+  }
+}

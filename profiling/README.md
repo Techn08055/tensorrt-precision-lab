@@ -26,3 +26,23 @@ the fixed-launch-overhead diagnosis was confirmed directly: CUDA graphs (which r
 that overhead) closed part of the FP16→INT8 gap, from 1.7x to 1.86x. The compute-bound
 / genuine-INT8-kernel conclusions still hold; the per-layer JSON/nsys traces here reflect
 the pre-optimization engines and haven't been re-captured against the current ones.
+
+## Follow-up: per-block INT8 sensitivity sweep
+
+Done. Tested whether quantizing only the layers with the least accuracy impact
+(rather than the whole network) could keep most of INT8's speed while paying
+less of its accuracy cost. Small scattered/contiguous selective-INT8 engines
+(9-16 of 53 conv layers) got the accuracy part mostly right — but no speed:
+at batch=1 those engines are statistically indistinguishable from full FP16,
+because the extra reformat layers TensorRT inserts at each FP16↔INT8 boundary
+cost about as much as the INT8 compute saves. The fix was to stop scattering
+INT8 in small islands and instead keep only the two most sensitive units (the
+stem conv and the first block) pinned to FP16, forcing everything else — 48
+of 53 conv layers — to INT8. That engine needs only 3 reformat layers instead
+of 5-10, and is a real, **reproducible** 1.58x faster than FP16 (0.381ms vs.
+~0.603ms), at an accuracy cost between the small selective engines and full
+INT8 (93.75% top-1). Separate finding along the way: the scattered/contiguous
+engines turned out to be **bimodal across identical rebuilds** — TensorRT
+picks one of two fixed tactics each build, with meaningfully different
+accuracy — while the head-FP16 engine reproduced identically across every
+rebuild tried. See [`INT8_SENSITIVITY_SWEEP.md`](INT8_SENSITIVITY_SWEEP.md).

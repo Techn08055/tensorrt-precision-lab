@@ -1,0 +1,147 @@
+FP32 layer-wise profile — ResNet50, batch=1, 3x224x224
+Layers: 85   Total avg: 2.30931 ms
+Category split: compute-bound=92.2%  other=3.3%  memory-bound=4.5%
+
+idx  name                                                                    type                 dtype     avg_ms     pct  category     
+-----------------------------------------------------------------------------------------------------------------------------------------
+  0  Reformatting CopyNode for Input Tensor 0 to node_Conv_754 + node_relu   Reformat             Float    0.01722   0.75%  memory-bound 
+  1  node_Conv_754 + node_relu                                               CaskConvolution      Float    0.05210   2.26%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x16_stage1_warpsize4x1x1_g1_tensor16x8x8_aligna4_alignc4
+  2  Reformatting CopyNode for Input Tensor 0 to node_max_pool2d             NoOp                 Float    0.00000   0.00%  memory-bound 
+  3  node_max_pool2d                                                         CaskPooling          Float    0.01037   0.45%  other        
+     tactic: sm50_xmma_pooling_max_nhwc_FP32FP32_WINDOWSIZE_3_NOT_PROPAGATE_NAN_2D
+  4  node_Conv_756 + node_relu_1                                             CaskConvolution      Float    0.00968   0.42%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+  5  node_Conv_758 + node_relu_2                                             CaskConvolution      Float    0.03694   1.60%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+  6  node_Conv_760                                                           CaskConvolution      Float    0.01998   0.87%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+  7  node_Conv_762 + node_add_95 + node_relu_3                               CaskConvolution      Float    0.02107   0.91%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+  8  node_Conv_764 + node_relu_4                                             CaskGemmConvolution  Float    0.02341   1.01%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8
+  9  node_Conv_766 + node_relu_5                                             CaskConvolution      Float    0.03650   1.58%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+ 10  node_Conv_768 + node_add_171 + node_relu_6                              CaskConvolution      Float    0.02100   0.91%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+ 11  node_Conv_770 + node_relu_7                                             CaskGemmConvolution  Float    0.02275   0.99%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8
+ 12  node_Conv_772 + node_relu_8                                             CaskConvolution      Float    0.03676   1.59%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x16x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+ 13  node_Conv_774 + node_add_247 + node_relu_9                              CaskConvolution      Float    0.02098   0.91%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8
+ 14  node_Conv_782                                                           CaskConvolution      Float    0.04316   1.87%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r1s1
+ 15  node_Conv_776 + node_relu_10                                            CaskGemmConvolution  Float    0.03245   1.41%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 16  Reformatting CopyNode for Input Tensor 0 to node_Conv_778 + node_relu…  NoOp                 Float    0.00000   0.00%  memory-bound 
+ 17  node_Conv_778 + node_relu_11                                            CaskConvolution      Float    0.06509   2.82%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage3_warpsize1x4x1_g1_ffma_t1r3s3_aligna4_alignc4
+ 18  Reformatting CopyNode for Input Tensor 0 to node_Conv_780 + node_add_…  NoOp                 Float    0.00000   0.00%  memory-bound 
+ 19  node_Conv_780 + node_add_333 + node_relu_12                             CaskGemmConvolution  Float    0.02099   0.91%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 20  node_Conv_784 + node_relu_13                                            CaskGemmConvolution  Float    0.02231   0.97%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 21  Reformatting CopyNode for Input Tensor 0 to node_Conv_786 + node_relu…  Reformat             Float    0.00458   0.20%  memory-bound 
+ 22  node_Conv_786 + node_relu_14                                            CaskConvolution      Float    0.03800   1.65%  compute-bound
+     tactic: sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2
+ 23  Reformatting CopyNode for Input Tensor 0 to node_Conv_788 + node_add_…  Reformat             Float    0.00466   0.20%  memory-bound 
+ 24  node_Conv_788 + node_add_409 + node_relu_15                             CaskGemmConvolution  Float    0.02086   0.90%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 25  node_Conv_790 + node_relu_16                                            CaskGemmConvolution  Float    0.02229   0.97%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 26  Reformatting CopyNode for Input Tensor 0 to node_Conv_792 + node_relu…  Reformat             Float    0.00440   0.19%  memory-bound 
+ 27  node_Conv_792 + node_relu_17                                            CaskConvolution      Float    0.03829   1.66%  compute-bound
+     tactic: sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2
+ 28  Reformatting CopyNode for Input Tensor 0 to node_Conv_794 + node_add_…  Reformat             Float    0.00447   0.19%  memory-bound 
+ 29  node_Conv_794 + node_add_485 + node_relu_18                             CaskGemmConvolution  Float    0.02087   0.90%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 30  node_Conv_796 + node_relu_19                                            CaskGemmConvolution  Float    0.02243   0.97%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 31  Reformatting CopyNode for Input Tensor 0 to node_Conv_798 + node_relu…  Reformat             Float    0.00450   0.19%  memory-bound 
+ 32  node_Conv_798 + node_relu_20                                            CaskConvolution      Float    0.03706   1.60%  compute-bound
+     tactic: sm80_xmma_fprop_wngd_f32f32_f32_f32_nchwkcrs_nchw_tilesize8x16x64x8_warpsize8x1x1_wngd2x2
+ 33  Reformatting CopyNode for Input Tensor 0 to node_Conv_800 + node_add_…  Reformat             Float    0.00460   0.20%  memory-bound 
+ 34  node_Conv_800 + node_add_561 + node_relu_21                             CaskGemmConvolution  Float    0.02079   0.90%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 35  node_Conv_808                                                           CaskConvolution      Float    0.04217   1.83%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_f32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x128x16_stage4_warpsize2x2x1_g1_tensor16x8x8_t1r1s1
+ 36  node_Conv_802 + node_relu_22                                            CaskGemmConvolution  Float    0.03464   1.50%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 37  node_Conv_804 + node_relu_23                                            CaskConvolution      Float    0.07553   3.27%  compute-bound
+     tactic: ampere_scudnn_128x32_sliced1x4_ldg4_relu_exp_small_nhwc_tn_v1
+ 38  node_Conv_806 + node_add_647 + node_relu_24                             CaskGemmConvolution  Float    0.02396   1.04%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 39  node_Conv_810 + node_relu_25                                            CaskGemmConvolution  Float    0.02373   1.03%  compute-bound
+     tactic: sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8
+ 40  Reformatting CopyNode for Input Tensor 0 to node_Conv_812 + node_relu…  Reformat             Float    0.00425   0.18%  memory-bound 
+ 41  node_Conv_812 + node_relu_26                                            CaskConvolution      Float    0.05500   2.38%  compute-bound
+     tactic: ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1
+ 42  Reformatting CopyNode for Input Tensor 0 to node_Conv_814 + node_add_…  Reformat             Float    0.00442   0.19%  memory-bound 
+ 43  node_Conv_814 + node_add_723 + node_relu_27                             CaskGemmConvolution  Float    0.02410   1.04%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 44  node_Conv_816 + node_relu_28                                            CaskGemmConvolution  Float    0.02343   1.01%  compute-bound
+     tactic: sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8
+ 45  Reformatting CopyNode for Input Tensor 0 to node_Conv_818 + node_relu…  Reformat             Float    0.00418   0.18%  memory-bound 
+ 46  node_Conv_818 + node_relu_29                                            CaskConvolution      Float    0.04460   1.93%  compute-bound
+     tactic: ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1
+ 47  Reformatting CopyNode for Input Tensor 0 to node_Conv_820 + node_add_…  Reformat             Float    0.00437   0.19%  memory-bound 
+ 48  node_Conv_820 + node_add_799 + node_relu_30                             CaskGemmConvolution  Float    0.02383   1.03%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 49  node_Conv_822 + node_relu_31                                            CaskGemmConvolution  Float    0.02348   1.02%  compute-bound
+     tactic: sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8
+ 50  Reformatting CopyNode for Input Tensor 0 to node_Conv_824 + node_relu…  Reformat             Float    0.00413   0.18%  memory-bound 
+ 51  node_Conv_824 + node_relu_32                                            CaskConvolution      Float    0.05118   2.22%  compute-bound
+     tactic: ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1
+ 52  Reformatting CopyNode for Input Tensor 0 to node_Conv_826 + node_add_…  Reformat             Float    0.00444   0.19%  memory-bound 
+ 53  node_Conv_826 + node_add_875 + node_relu_33                             CaskGemmConvolution  Float    0.02398   1.04%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 54  node_Conv_828 + node_relu_34                                            CaskGemmConvolution  Float    0.02336   1.01%  compute-bound
+     tactic: sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8
+ 55  Reformatting CopyNode for Input Tensor 0 to node_Conv_830 + node_relu…  Reformat             Float    0.00432   0.19%  memory-bound 
+ 56  node_Conv_830 + node_relu_35                                            CaskConvolution      Float    0.04562   1.98%  compute-bound
+     tactic: ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1
+ 57  Reformatting CopyNode for Input Tensor 0 to node_Conv_832 + node_add_…  Reformat             Float    0.00442   0.19%  memory-bound 
+ 58  node_Conv_832 + node_add_951 + node_relu_36                             CaskGemmConvolution  Float    0.02384   1.03%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 59  node_Conv_834 + node_relu_37                                            CaskGemmConvolution  Float    0.02360   1.02%  compute-bound
+     tactic: sm86_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x64x64_stage3_warpsize2x2x1_tensor16x8x8
+ 60  Reformatting CopyNode for Input Tensor 0 to node_Conv_836 + node_relu…  Reformat             Float    0.00426   0.18%  memory-bound 
+ 61  node_Conv_836 + node_relu_38                                            CaskConvolution      Float    0.04321   1.87%  compute-bound
+     tactic: ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1
+ 62  Reformatting CopyNode for Input Tensor 0 to node_Conv_838 + node_add_…  Reformat             Float    0.00440   0.19%  memory-bound 
+ 63  node_Conv_838 + node_add_1027 + node_relu_39                            CaskGemmConvolution  Float    0.02390   1.03%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_nn_n_tilesize64x128x16_stage4_warpsize2x2x1_tensor16x8x8
+ 64  Reformatting CopyNode for Input Tensor 0 to node_Conv_846               NoOp                 Float    0.00000   0.00%  memory-bound 
+ 65  node_Conv_846                                                           CaskConvolution      Float    0.20669   8.95%  compute-bound
+     tactic: sm70_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize64x128x8_stage1_warpsize1x4x1_g1_ffma_t1r1s1_aligna4_alignc4
+ 66  node_Conv_840 + node_relu_40                                            CaskGemmConvolution  Float    0.03787   1.64%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8
+ 67  Reformatting CopyNode for Input Tensor 0 to node_Conv_842 + node_relu…  NoOp                 Float    0.00000   0.00%  memory-bound 
+ 68  node_Conv_842 + node_relu_41                                            CaskConvolution      Float    0.13452   5.83%  compute-bound
+     tactic: sm80_xmma_fprop_implicit_gemm_f32f32_f32f32_f32_nhwckrsc_nhwc_tilesize32x32x8_stage3_warpsize1x2x1_g1_ffma_t1r3s3_aligna4_alignc4
+ 69  Reformatting CopyNode for Input Tensor 0 to node_Conv_844 + node_add_…  NoOp                 Float    0.00000   0.00%  memory-bound 
+ 70  Reformatting CopyNode for Input Tensor 1 to node_Conv_844 + node_add_…  NoOp                 Float    0.00000   0.00%  memory-bound 
+ 71  node_Conv_844 + node_add_1113 + node_relu_42                            CaskGemmConvolution  Float    0.04022   1.74%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8
+ 72  node_Conv_848 + node_relu_43                                            CaskGemmConvolution  Float    0.03555   1.54%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x32x64_stage4_warpsize2x1x2_tensor16x8x8
+ 73  Reformatting CopyNode for Input Tensor 0 to node_Conv_850 + node_relu…  Reformat             Float    0.00418   0.18%  memory-bound 
+ 74  node_Conv_850 + node_relu_44                                            CaskConvolution      Float    0.09532   4.13%  compute-bound
+     tactic: sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec2_fltVec1_1_TP7_TQ8_C8_R3_S3_U1_V1
+ 75  Reformatting CopyNode for Input Tensor 0 to node_Conv_852 + node_add_…  Reformat             Float    0.00424   0.18%  memory-bound 
+ 76  node_Conv_852 + node_add_1189 + node_relu_45                            CaskGemmConvolution  Float    0.04036   1.75%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8
+ 77  node_Conv_854 + node_relu_46                                            CaskGemmConvolution  Float    0.03670   1.59%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize64x32x64_stage4_warpsize2x1x2_tensor16x8x8
+ 78  Reformatting CopyNode for Input Tensor 0 to node_Conv_856 + node_relu…  Reformat             Float    0.00399   0.17%  memory-bound 
+ 79  node_Conv_856 + node_relu_47                                            CaskConvolution      Float    0.10327   4.47%  compute-bound
+     tactic: sm50_xmma_conv_fprop_fused_conv_act_fp32_NCHW_fp32_NCHW_KCRS_fp32_fp32_fp32_Accfloat_1_1_cC1_dC1_srcVec2_fltVec1_1_TP7_TQ8_C8_R3_S3_U1_V1
+ 80  Reformatting CopyNode for Input Tensor 0 to node_Conv_858 + node_add_…  Reformat             Float    0.00407   0.18%  memory-bound 
+ 81  node_Conv_858 + node_add_1265 + node_relu_48                            CaskGemmConvolution  Float    0.03900   1.69%  compute-bound
+     tactic: sm80_xmma_gemm_f32f32_tf32f32_f32_tn_n_tilesize32x32x64_stage3_warpsize2x1x2_tensor16x8x8
+ 82  node_mean                                                               CaskPooling          Float    0.00532   0.23%  other        
+     tactic: sm50_xmma_pooling_fw_4d_FP32FP32NHWC_Average_FastDiv_CAlign4
+ 83  Reformatting CopyNode for Input Tensor 0 to {ForeignNode[fc.weight...…  NoOp                 Float    0.00000   0.00%  memory-bound 
+ 84  node_linear_myl84_0                                                     gemm                 Float    0.06110   2.65%  other        
+     tactic: sm50_xmma_cublas_gemvx_f32f32_f32_f32_tn_n_int32_unit_n_launch_param4x32x32_strided_unit_stride

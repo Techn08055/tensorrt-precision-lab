@@ -1,0 +1,27 @@
+{
+  "batch": 64,
+  "seed": 0,
+  "input": "real images (../calibration/images)",
+  "results": {
+    "resnet50_fp16": {
+      "max_abs_diff": 0.08669918775558472,
+      "mean_abs_diff": 0.002305117668583989,
+      "top1_match_rate": 1.0
+    },
+    "resnet50_selective_int8": {
+      "max_abs_diff": 0.9831733703613281,
+      "mean_abs_diff": 0.02130942977964878,
+      "top1_match_rate": 0.96875
+    },
+    "resnet50_selective_int8_contiguous": {
+      "max_abs_diff": 0.2941768169403076,
+      "mean_abs_diff": 0.012345466762781143,
+      "top1_match_rate": 0.984375
+    },
+    "resnet50_int8": {
+      "max_abs_diff": 3.9507293701171875,
+      "mean_abs_diff": 0.07235101610422134,
+      "top1_match_rate": 0.90625
+    }
+  }
+}

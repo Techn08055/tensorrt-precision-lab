@@ -1,0 +1,37 @@
+{
+  "batch": 64,
+  "seed": 0,
+  "input": "real images (../calibration/images)",
+  "results": {
+    "resnet50_fp32": {
+      "max_abs_diff": 0.046017277985811234,
+      "mean_abs_diff": 0.0010613894555717707,
+      "top1_match_rate": 1.0
+    },
+    "resnet50_fp16": {
+      "max_abs_diff": 0.08669918775558472,
+      "mean_abs_diff": 0.002305117668583989,
+      "top1_match_rate": 1.0
+    },
+    "resnet50_selective_int8": {
+      "max_abs_diff": 3.7540130615234375,
+      "mean_abs_diff": 0.04367497190833092,
+      "top1_match_rate": 0.9375
+    },
+    "resnet50_selective_int8_contiguous": {
+      "max_abs_diff": 3.7626519203186035,
+      "mean_abs_diff": 0.03994177654385567,
+      "top1_match_rate": 0.953125
+    },
+    "resnet50_selective_int8_headfp16": {
+      "max_abs_diff": 3.784618854522705,
+      "mean_abs_diff": 0.049257319420576096,
+      "top1_match_rate": 0.9375
+    },
+    "resnet50_int8": {
+      "max_abs_diff": 3.9507293701171875,
+      "mean_abs_diff": 0.07235101610422134,
+      "top1_match_rate": 0.90625
+    }
+  }
+}

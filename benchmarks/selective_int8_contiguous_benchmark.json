@@ -1,0 +1,22 @@
+{
+  "batch": 1,
+  "use_cuda_graph": true,
+  "results": {
+    "fp16": {
+      "throughput_qps": 1472.16,
+      "gpu_latency_mean_ms": 0.67927
+    },
+    "int8_selective_scattered": {
+      "throughput_qps": 1661.49,
+      "gpu_latency_mean_ms": 0.60187
+    },
+    "int8_selective_contiguous": {
+      "throughput_qps": 1685.29,
+      "gpu_latency_mean_ms": 0.59337
+    },
+    "int8_full": {
+      "throughput_qps": 2981.48,
+      "gpu_latency_mean_ms": 0.3354
+    }
+  }
+}
