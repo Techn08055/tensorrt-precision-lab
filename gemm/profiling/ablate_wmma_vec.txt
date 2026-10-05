@@ -1,0 +1,15 @@
+S=1024
+  mode 0 full                    0.2390 ms  100.0% of full  (  8986.7 GFLOPS-equivalent)
+  mode 1 no global loads         0.1774 ms   74.2% of full  ( 12108.3 GFLOPS-equivalent)
+  mode 2 loads only, no mma      0.0721 ms   30.2% of full  ( 29781.2 GFLOPS-equivalent)
+  mode 3 mma only                0.1135 ms   47.5% of full  ( 18927.4 GFLOPS-equivalent)
+S=2048
+  mode 0 full                    1.6964 ms  100.0% of full  ( 10127.3 GFLOPS-equivalent)
+  mode 1 no global loads         1.3538 ms   79.8% of full  ( 12689.8 GFLOPS-equivalent)
+  mode 2 loads only, no mma      0.5025 ms   29.6% of full  ( 34189.1 GFLOPS-equivalent)
+  mode 3 mma only                0.8482 ms   50.0% of full  ( 20254.7 GFLOPS-equivalent)
+S=4096
+  mode 0 full                   13.4025 ms  100.0% of full  ( 10254.7 GFLOPS-equivalent)
+  mode 1 no global loads         9.4057 ms   70.2% of full  ( 14612.3 GFLOPS-equivalent)
+  mode 2 loads only, no mma      8.0449 ms   60.0% of full  ( 17083.9 GFLOPS-equivalent)
+  mode 3 mma only                5.1857 ms   38.7% of full  ( 26503.2 GFLOPS-equivalent)

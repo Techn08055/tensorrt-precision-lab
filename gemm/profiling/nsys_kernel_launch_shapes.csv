@@ -1,0 +1,20 @@
+kernel,grid_x,grid_y,block_x,block_y,registers_per_thread,static_smem_bytes,dynamic_smem_bytes,launches,mean_ms
+gemm_naive_fp16,64,64,32,32,26,0,0,7,25.2597
+matrix_multiplication_kernel_wmma,128,32,32,4,40,0,0,7,3.0938
+gemm_wmma_blocked_kernel,32,32,128,1,70,8192,0,7,1.9192
+void gemm_wmma_v2_kernel<,32,32,128,1,80,12288,0,7,2.0065
+void gemm_wmma_v2_kernel<,32,32,128,1,93,12288,0,7,1.5007
+void cutlass::Kernel<cutlass_80_tensorop_f16_s16816gemm_relu_f16_256x128_32x3_nn_align8>,128,1,256,1,228,0,73728,7,0.6959
+gemm_naive_fp16,128,128,32,32,26,0,0,7,252.191
+matrix_multiplication_kernel_wmma,256,64,32,4,40,0,0,7,38.0869
+gemm_wmma_blocked_kernel,64,64,128,1,70,8192,0,7,16.2866
+void gemm_wmma_v2_kernel<,64,64,128,1,80,12288,0,7,17.7472
+void gemm_wmma_v2_kernel<,64,64,128,1,93,12288,0,7,12.6252
+void cutlass::Kernel<cutlass_80_tensorop_f16_s16816gemm_relu_f16_256x128_32x3_nn_align8>,256,2,256,1,228,0,73728,7,5.4905
+gemm_naive_fp16,8,8,32,32,26,0,0,7,0.0673
+matrix_multiplication_kernel_wmma,16,4,32,4,40,0,0,7,0.0106
+gemm_wmma_blocked_kernel,4,4,128,1,70,8192,0,7,0.0185
+void gemm_wmma_v2_kernel<,4,4,128,1,80,12288,0,7,0.0192
+void gemm_wmma_v2_kernel<,4,4,128,1,93,12288,0,7,0.0122
+ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_f2f_stages_64x5_nn,4,4,128,1,146,49152,32768,7,0.0052
+void gemm_wmma_v2_kernel<,2,2,128,1,93,12288,0,1,0.0102
