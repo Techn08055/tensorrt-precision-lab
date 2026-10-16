@@ -9,8 +9,8 @@ CUDA kernel work (GEMM, Conv2D) underneath it as the same model, same measuremen
 
 | # | Question | Where | Status |
 |---|---|---|---|
-| 01 | How does GEMM execute on a GPU? | [`gemm/`](gemm/) | in progress — mental model + naive-kernel spec done, kernel not yet written |
-| 02 | How does a ResNet convolution map to GEMM? | [`conv/`](conv/) | not started |
+| 01 | How does GEMM execute on a GPU? | [`gemm/`](gemm/) | in progress — naive → tiled → register-blocked → WMMA kernels done, at ~40-60% of cuBLAS |
+| 02 | How does a ResNet convolution map to GEMM? | [`conv/`](conv/) | in progress — `Conv_846` (1x1) running as a GEMM, benchmarked against cuBLAS, cuDNN and TensorRT |
 | 03 | What does FP32→FP16→INT8 cost and save? | [`resnet/`](resnet/), this file below | done ([video 1](videos/01_fp32_fp16_int8/)) |
 | 04 | What does TensorRT fuse, and is there more to fuse? | [`profiling/`](profiling/) | done |
 | 05 | Can quantizing only the safe layers keep INT8's speed? | [`profiling/INT8_SENSITIVITY_SWEEP.md`](profiling/INT8_SENSITIVITY_SWEEP.md) | done ([video 2](videos/02_mixed_precision/)) |
@@ -21,8 +21,8 @@ CUDA kernel work (GEMM, Conv2D) underneath it as the same model, same measuremen
 
 ```
 resnet/           completed engines: fp32/, fp16/, int8/, selective_int8/ (questions 03, 05, 06)
-gemm/             CUDA GEMM kernel lab (question 01) -- not started
-conv/             CUDA Conv2D kernel lab (question 02) -- not started, depends on gemm/
+gemm/             CUDA GEMM kernel lab (question 01)
+conv/             CUDA Conv2D kernel lab (question 02), builds on gemm/
 models/           ResNet50 weights + ONNX export
 calibration/      INT8 calibration cache + images
 scripts/          build / benchmark / calibrate / profile / sweep -- one script per step

@@ -29,6 +29,8 @@ gemm/src/gemm_regblock_fp16
 gemm/src/gemm_wmma_blocked_fp16
 gemm/src/gemm_wmma_vec_fp16
 gemm/profiling/ablate_wmma_vec
+conv/src/conv846_gemm
+conv/data/
 
 # Large binary Nsight traces — the small *_cuda_gpu_kern_sum.csv summaries are kept, they're the actual cited evidence
 profiling/nsys/*.nsys-rep
