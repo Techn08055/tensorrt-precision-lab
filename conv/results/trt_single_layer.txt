@@ -1,0 +1,20 @@
+Conv_846 TensorRT 10.14.1.48.post1 FP16 one-layer engine (conv): max|out - onnx| 0.05673
+  back-to-back 0.0214 ms   graph replay 0.0191 ms
+  layer: Reformatting CopyNode for Input Tensor 0 to (Unnamed Layer* 0) [Convol  tactic: 
+  layer: (Unnamed Layer* 0) [Convolution]  tactic: sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x128x32_
+  layer: Reformatting CopyNode for Output Tensor 0 to (Unnamed Layer* 0) [Convo  tactic: 
+Conv_842 TensorRT 10.14.1.48.post1 FP16 one-layer engine (conv+relu): max|out - onnx| 0.03808
+  back-to-back 0.0197 ms   graph replay 0.0175 ms
+  layer: Reformatting CopyNode for Input Tensor 0 to (Unnamed Layer* 0) [Convol  tactic: 
+  layer: (Unnamed Layer* 0) [Convolution] + (Unnamed Layer* 1) [Activation]  tactic: sm80_xmma_fprop_implicit_gemm_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64x32x64_s
+  layer: Reformatting CopyNode for Output Tensor 0 to (Unnamed Layer* 0) [Convo  tactic: 
+Conv_850 TensorRT 10.14.1.48.post1 FP16 one-layer engine (conv+relu): max|out - onnx| 0.03704
+  back-to-back 0.0176 ms   graph replay 0.0148 ms
+  layer: Reformatting CopyNode for Input Tensor 0 to (Unnamed Layer* 0) [Convol  tactic: 
+  layer: (Unnamed Layer* 0) [Convolution] + (Unnamed Layer* 1) [Activation]  tactic: sm80_xmma_fprop_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64
+  layer: Reformatting CopyNode for Output Tensor 0 to (Unnamed Layer* 0) [Convo  tactic: 
+Conv_856 TensorRT 10.14.1.48.post1 FP16 one-layer engine (conv+relu): max|out - onnx| 0.06014
+  back-to-back 0.0173 ms   graph replay 0.0152 ms
+  layer: Reformatting CopyNode for Input Tensor 0 to (Unnamed Layer* 0) [Convol  tactic: 
+  layer: (Unnamed Layer* 0) [Convolution] + (Unnamed Layer* 1) [Activation]  tactic: sm80_xmma_fprop_implicit_gemm_indexed_f16f16_f16f16_f16_nhwckrsc_nhwc_tilesize64
+  layer: Reformatting CopyNode for Output Tensor 0 to (Unnamed Layer* 0) [Convo  tactic: 

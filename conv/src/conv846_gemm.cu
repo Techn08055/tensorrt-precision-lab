@@ -13,7 +13,7 @@
 //
 // Build: nvcc -O3 -arch=sm_89 conv846_gemm.cu -o conv846_gemm -lcublas
 // Run:   ./conv846_gemm             random data at the real shape
-//        ./conv846_gemm ../data     real tensors from ../benchmarks/export_conv846_real.py
+//        ./conv846_gemm ../data/Conv_846   real tensors from ../benchmarks/export_conv_real.py
 
 // Reuse the step-4 kernel as-is; its benchmark main() is renamed out of the way.
 #define main gemm_wmma_vec_main
@@ -21,6 +21,7 @@
 #undef main
 
 #include <string>
+#include <cuda_pipeline.h>
 
 #define CI 1024
 #define CO 2048
@@ -54,10 +55,15 @@ static void launch_gemm(const half* dW, const half* dXp, half* dY, int n) {
 // tile to P[z]. Same 64x64 tile, 4 warps and 2x2 fragments as the step-4 kernel.
 // shortcut: assumes M%64 == 0, N%64 == 0 (pad N first) and (K/splits)%32 == 0 — true for
 // Conv_846; add edge handling before reusing it on other layers.
-// FOLD=true: B is the raw 1024x14x14 input and the stride-2 gather happens inside the
-// B tile load (no packed buffer, no gather kernel); FOLD=false: B is the packed Kx64 buffer.
-template <bool FOLD>
-__global__ void gemm_wmma_splitk(const half* A, const half* B, float* P, int M, int N, int K) {
+// FOLD selects how the B tile is loaded (padding columns 49..63 always load zero):
+//   0: B is a packed Kx64 buffer (from a gather/im2col kernel), 16-byte loads
+//   1: B is the raw 1024x14x14 input of Conv_846, 1x1 stride-2 gather done in the load
+//   2: B is the raw 512x7x7 input of Conv_850/856, 3x3 pad-1 im2col done in the load
+//      (implicit GEMM, k = ci*9 + kh*3 + kw)
+// AccT: accumulator type. half runs the tensor cores at 2x the FP32-accumulate rate on this
+// GPU (../../gemm/profiling/mma_rate.cu) at the cost of precision; partials are stored as AccT.
+template <int FOLD, typename AccT = float>
+__global__ void gemm_wmma_splitk(const half* A, const half* B, AccT* P, int M, int N, int K) {
     __shared__ __align__(32) half As[BM * BK];
     __shared__ __align__(32) half Bs[BK * BN];
     int tid = threadIdx.x, warp = tid / WARP_SIZE;
@@ -65,25 +71,34 @@ __global__ void gemm_wmma_splitk(const half* A, const half* B, float* P, int M, 
     int row0 = blockIdx.y * BM, col0 = blockIdx.x * BN;
     int kc = K / gridDim.z, kbeg = blockIdx.z * kc;
     // FOLD: 128 threads over a 64-wide tile, so each thread always loads the same column
-    // (pixel) and its input offset can be computed once; padding columns 49..63 load zero.
+    // (pixel) and its input offset can be computed once.
     int fold_p = tid % BN;
     int fold_off = fold_p < NPIX ? (fold_p / HW_OUT) * STRIDE * HW_IN + (fold_p % HW_OUT) * STRIDE : -1;
+    int fold_oh = fold_p / HW_OUT, fold_ow = fold_p % HW_OUT;  // FOLD 2: 7x7 in and out
 
     wmma::fragment<wmma::matrix_a, WMMA, WMMA, WMMA, half, wmma::row_major> a_frag[2];
     wmma::fragment<wmma::matrix_b, WMMA, WMMA, WMMA, half, wmma::row_major> b_frag[2];
-    wmma::fragment<wmma::accumulator, WMMA, WMMA, WMMA, float> acc[2][2];
+    wmma::fragment<wmma::accumulator, WMMA, WMMA, WMMA, AccT> acc[2][2];
     for (int i = 0; i < 2; i++)
-        for (int j = 0; j < 2; j++) wmma::fill_fragment(acc[i][j], 0.0f);
+        for (int j = 0; j < 2; j++) wmma::fill_fragment(acc[i][j], (AccT)0.0f);
 
     for (int k0 = kbeg; k0 < kbeg + kc; k0 += BK) {
         for (int v = tid; v < BM * BK / 8; v += BLK_THREADS) {
             int r = v / (BK / 8), c = v % (BK / 8);
             ((uint4*)As)[v] = *(const uint4*)(A + (row0 + r) * K + k0 + c * 8);
         }
-        if (FOLD) {
+        if (FOLD == 1) {
             #pragma unroll
             for (int r = tid / BN; r < BK; r += BLK_THREADS / BN)
                 Bs[r * BN + fold_p] = fold_off >= 0 ? B[(k0 + r) * HW_IN * HW_IN + fold_off] : __float2half(0.0f);
+        } else if (FOLD == 2) {
+            #pragma unroll
+            for (int r = tid / BN; r < BK; r += BLK_THREADS / BN) {
+                int k = k0 + r, ci = k / 9, t = k % 9;
+                int ih = fold_oh + t / 3 - 1, iw = fold_ow + t % 3 - 1;
+                bool in = fold_p < NPIX && ih >= 0 && ih < HW_OUT && iw >= 0 && iw < HW_OUT;
+                Bs[r * BN + fold_p] = in ? B[(ci * HW_OUT + ih) * HW_OUT + iw] : __float2half(0.0f);
+            }
         } else {
             for (int v = tid; v < BK * BN / 8; v += BLK_THREADS) {
                 int r = v / (BN / 8), c = v % (BN / 8);
@@ -102,7 +117,65 @@ __global__ void gemm_wmma_splitk(const half* A, const half* B, float* P, int M, 
         }
         __syncthreads();
     }
-    float* Pz = P + (size_t)blockIdx.z * M * N;
+    AccT* Pz = P + (size_t)blockIdx.z * M * N;
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            wmma::store_matrix_sync(Pz + (row0 + wr + i * WMMA) * N + col0 + wc + j * WMMA, acc[i][j], N,
+                                    wmma::mem_row_major);
+}
+
+// Same split-K GEMM (packed B only) with a STAGES-deep cp.async pipeline: tiles for the next
+// STAGES-1 k-steps are already in flight to shared memory while the current one is computed,
+// instead of load -> sync -> compute -> sync. STAGES * 8 KB of shared memory.
+// PAD: extra halves per shared-memory row (A rows BK+PAD, B rows BN+PAD wide) so the 16 rows
+// a fragment load reads don't all start in the same banks. Must keep rows 16-byte aligned.
+template <int STAGES, typename AccT = float, int PAD = 0>
+__global__ void gemm_wmma_splitk_pipe(const half* A, const half* B, AccT* P, int M, int N, int K) {
+    constexpr int LDA = BK + PAD, LDB = BN + PAD;
+    __shared__ __align__(32) half As[STAGES][BM * LDA];
+    __shared__ __align__(32) half Bs[STAGES][BK * LDB];
+    int tid = threadIdx.x, warp = tid / WARP_SIZE;
+    int wr = (warp / 2) * 32, wc = (warp % 2) * 32;
+    int row0 = blockIdx.y * BM, col0 = blockIdx.x * BN;
+    int kc = K / gridDim.z, kbeg = blockIdx.z * kc, ntiles = kc / BK;
+
+    auto issue = [&](int t) {  // async-copy k-tile t into stage t % STAGES (16 bytes per copy)
+        if (t < ntiles) {
+            int k0 = kbeg + t * BK, s = t % STAGES;
+            for (int v = tid; v < BM * BK / 8; v += BLK_THREADS) {
+                int r = v / (BK / 8), c = v % (BK / 8);
+                __pipeline_memcpy_async(&As[s][r * LDA + c * 8], A + (row0 + r) * K + k0 + c * 8, 16);
+            }
+            for (int v = tid; v < BK * BN / 8; v += BLK_THREADS) {
+                int r = v / (BN / 8), c = v % (BN / 8);
+                __pipeline_memcpy_async(&Bs[s][r * LDB + c * 8], B + (k0 + r) * N + col0 + c * 8, 16);
+            }
+        }
+        __pipeline_commit();  // commit even when empty so the wait count below stays uniform
+    };
+
+    wmma::fragment<wmma::matrix_a, WMMA, WMMA, WMMA, half, wmma::row_major> a_frag[2];
+    wmma::fragment<wmma::matrix_b, WMMA, WMMA, WMMA, half, wmma::row_major> b_frag[2];
+    wmma::fragment<wmma::accumulator, WMMA, WMMA, WMMA, AccT> acc[2][2];
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++) wmma::fill_fragment(acc[i][j], (AccT)0.0f);
+
+    for (int t = 0; t < STAGES - 1; ++t) issue(t);
+    for (int t = 0; t < ntiles; ++t) {
+        __pipeline_wait_prior(STAGES - 2);  // tile t has landed (this thread's copies)
+        __syncthreads();                    // ...and everyone's; also: all warps are done with tile t-1
+        issue(t + STAGES - 1);              // refill the stage tile t-1 used
+        const half* as = As[t % STAGES];
+        const half* bs = Bs[t % STAGES];
+        #pragma unroll
+        for (int kk = 0; kk < BK; kk += WMMA) {
+            for (int i = 0; i < 2; i++) wmma::load_matrix_sync(a_frag[i], as + (wr + i * WMMA) * LDA + kk, LDA);
+            for (int j = 0; j < 2; j++) wmma::load_matrix_sync(b_frag[j], bs + kk * LDB + wc + j * WMMA, LDB);
+            for (int i = 0; i < 2; i++)
+                for (int j = 0; j < 2; j++) wmma::mma_sync(acc[i][j], a_frag[i], b_frag[j], acc[i][j]);
+        }
+    }
+    AccT* Pz = P + (size_t)blockIdx.z * M * N;
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 2; j++)
             wmma::store_matrix_sync(Pz + (row0 + wr + i * WMMA) * N + col0 + wc + j * WMMA, acc[i][j], N,
@@ -119,7 +192,7 @@ __global__ void splitk_reduce_bias(const float* P, const float* bias, half* Y, i
     Y[i] = __float2half(s);
 }
 
-template <bool FOLD>
+template <int FOLD>
 static void launch_splitk(const half* dW, const half* dXp, float* dP, const float* dBias, half* dY, int splits) {
     gemm_wmma_splitk<FOLD><<<dim3(NPAD / BN, CO / BM, splits), dim3(BLK_THREADS)>>>(dW, dXp, dP, CO, NPAD, CI);
     splitk_reduce_bias<<<(CO * NPIX + 255) / 256, 256>>>(dP, dBias, dY, splits);
@@ -158,12 +231,13 @@ template <typename T>
 static void read_bin(const std::string& path, std::vector<T>& v) {
     FILE* f = fopen(path.c_str(), "rb");
     if (!f || fread(v.data(), sizeof(T), v.size(), f) != v.size()) {
-        fprintf(stderr, "cannot read %zu values from %s (run export_conv846_real.py)\n", v.size(), path.c_str());
+        fprintf(stderr, "cannot read %zu values from %s (run export_conv_real.py)\n", v.size(), path.c_str());
         exit(1);
     }
     fclose(f);
 }
 
+#ifndef CONV846_NO_MAIN  // conv850_gemm.cu includes this file for its split-K kernel
 int main(int argc, char** argv) {
     const bool real = argc > 1;
     std::vector<half> hX((size_t)CI * HW_IN * HW_IN), hW((size_t)CO * CI), hY((size_t)CO * NPAD);
@@ -259,8 +333,8 @@ int main(int argc, char** argv) {
     float t_split[2][NSPLIT];
     double e_split[2][NSPLIT];
     auto run_variant = [&](int fold, int splits) {
-        if (fold) launch_splitk<true>(dW, dX, dP, dBias, dY, splits);
-        else { launch_gather(dX, dXp, NPAD); launch_splitk<false>(dW, dXp, dP, dBias, dY, splits); }
+        if (fold) launch_splitk<1>(dW, dX, dP, dBias, dY, splits);
+        else { launch_gather(dX, dXp, NPAD); launch_splitk<0>(dW, dXp, dP, dBias, dY, splits); }
     };
     for (int f = 0; f < 2; ++f)
     for (int s = 0; s < NSPLIT; ++s) {
@@ -320,3 +394,4 @@ int main(int argc, char** argv) {
     cublasDestroy(g_handle);
     return 0;
 }
+#endif
