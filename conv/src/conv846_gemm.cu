@@ -129,15 +129,36 @@ __global__ void gemm_wmma_splitk(const half* A, const half* B, AccT* P, int M, i
 // instead of load -> sync -> compute -> sync. STAGES * 8 KB of shared memory.
 // PAD: extra halves per shared-memory row (A rows BK+PAD, B rows BN+PAD wide) so the 16 rows
 // a fragment load reads don't all start in the same banks. Must keep rows 16-byte aligned.
-template <int STAGES, typename AccT = float, int PAD = 0>
-__global__ void gemm_wmma_splitk_pipe(const half* A, const half* B, AccT* P, int M, int N, int K) {
+// B can be read in place instead of from a 64-padded copy: ldb = B's real row stride, n_real =
+// its real column count; tile columns >= n_real are zero-filled by cp.async. BVEC = halves per
+// async copy (8 = 16 bytes, needs ldb % 8 == 0; 4 = 8 bytes, needs ldb % 4 == 0).
+// EPI (needs gridDim.z == 1, AccT float): skip the FP32 partials, add bias (+ ReLU) and write the
+// final half output Y[M x n_real] straight from the accumulators.
+// KS > 0: implicit GEMM. B is the raw conv input X[cin][h][h] and each B tile is gathered from the
+// KS x KS windows while loading (k = ci*KS*KS + kh*KS + kw, pixel p = oh*ho + ow), so no im2col
+// buffer. The gather is plain loads (window offsets break 16-byte alignment); A stays on cp.async.
+// To hide those loads, tile t+2 is gathered into registers while tile t is computed, and written to
+// shared memory right after (register prefetch), so B runs one tile ahead instead of stalling.
+template <int STAGES, typename AccT = float, int PAD = 0, int BVEC = 8, bool EPI = false, int KS = 0>
+__global__ void gemm_wmma_splitk_pipe(const half* A, const half* B, AccT* P, int M, int N, int K, int ldb = -1,
+                                      int n_real = -1, half* Y = nullptr, const float* bias = nullptr, bool relu = false,
+                                      int cin = 0, int h = 0, int cs = 1, int cpad = 0, int ho = 1, int kr = 0) {
     constexpr int LDA = BK + PAD, LDB = BN + PAD;
-    __shared__ __align__(32) half As[STAGES][BM * LDA];
-    __shared__ __align__(32) half Bs[STAGES][BK * LDB];
+    constexpr int A_BYTES = STAGES * BM * LDA * 2, B_BYTES = STAGES * BK * LDB * 2;
+    constexpr int C_BYTES = EPI ? WARPS_PER_BLOCK * 32 * 32 * 4 : 0;  // epilogue scratch, reuses the tiles
+    __shared__ __align__(32) unsigned char smem[A_BYTES + B_BYTES > C_BYTES ? A_BYTES + B_BYTES : C_BYTES];
+    auto As = reinterpret_cast<half(*)[BM * LDA]>(smem);
+    auto Bs = reinterpret_cast<half(*)[BK * LDB]>(smem + A_BYTES);
+    if (ldb < 0) ldb = N;
+    if (n_real < 0) n_real = N;
     int tid = threadIdx.x, warp = tid / WARP_SIZE;
     int wr = (warp / 2) * 32, wc = (warp % 2) * 32;
     int row0 = blockIdx.y * BM, col0 = blockIdx.x * BN;
     int kc = K / gridDim.z, kbeg = blockIdx.z * kc, ntiles = kc / BK;
+    // implicit GEMM: 128 threads over a 64-wide tile, so each thread always gathers the same pixel column
+    const int gp = col0 + tid % BN;
+    const int gih = (gp / ho) * cs - cpad, giw = (gp % ho) * cs - cpad;
+    const bool gvalid = gp < n_real;
 
     auto issue = [&](int t) {  // async-copy k-tile t into stage t % STAGES (16 bytes per copy)
         if (t < ntiles) {
@@ -146,9 +167,11 @@ __global__ void gemm_wmma_splitk_pipe(const half* A, const half* B, AccT* P, int
                 int r = v / (BK / 8), c = v % (BK / 8);
                 __pipeline_memcpy_async(&As[s][r * LDA + c * 8], A + (row0 + r) * K + k0 + c * 8, 16);
             }
-            for (int v = tid; v < BK * BN / 8; v += BLK_THREADS) {
-                int r = v / (BN / 8), c = v % (BN / 8);
-                __pipeline_memcpy_async(&Bs[s][r * LDB + c * 8], B + (k0 + r) * N + col0 + c * 8, 16);
+            if constexpr (KS == 0)  // implicit B is gathered by gather()/stash() below
+            for (int v = tid; v < BK * BN / BVEC; v += BLK_THREADS) {
+                int r = v / (BN / BVEC), c = v % (BN / BVEC), gc = col0 + c * BVEC;
+                if (gc < n_real) __pipeline_memcpy_async(&Bs[s][r * LDB + c * BVEC], B + (k0 + r) * ldb + gc, BVEC * 2);
+                else __pipeline_memcpy_async(&Bs[s][r * LDB + c * BVEC], B, BVEC * 2, BVEC * 2);  // all zero-fill
             }
         }
         __pipeline_commit();  // commit even when empty so the wait count below stays uniform
@@ -159,6 +182,26 @@ __global__ void gemm_wmma_splitk_pipe(const half* A, const half* B, AccT* P, int
     wmma::fragment<wmma::accumulator, WMMA, WMMA, WMMA, AccT> acc[2][2];
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 2; j++) wmma::fill_fragment(acc[i][j], (AccT)0.0f);
+
+    constexpr int GR = KS > 0 ? BK * BN / BLK_THREADS : 1;  // B values each thread gathers per tile
+    constexpr int KK = KS > 0 ? KS : 1;                     // keeps the unused KS = 0 build free of /0
+    half breg[GR];
+    auto gather = [&](int t) {  // implicit GEMM: load tile t's B values into registers
+        if (t >= ntiles) return;
+        #pragma unroll
+        for (int i = 0; i < GR; ++i) {
+            int kq = kbeg + t * BK + tid / BN + i * (BLK_THREADS / BN), ci = kq / (KK * KK), tap = kq % (KK * KK);
+            int ih = gih + tap / KK, iw = giw + tap % KK;
+            bool in = gvalid && kq < kr && ih >= 0 && ih < h && iw >= 0 && iw < h;
+            breg[i] = in ? B[((size_t)ci * h + ih) * h + iw] : __float2half(0.0f);
+        }
+    };
+    auto stash = [&](int t) {  // ...and write them into tile t's shared-memory stage
+        if (t >= ntiles) return;
+        #pragma unroll
+        for (int i = 0; i < GR; ++i) Bs[t % STAGES][(tid / BN + i * (BLK_THREADS / BN)) * LDB + tid % BN] = breg[i];
+    };
+    if constexpr (KS > 0) { gather(0); stash(0); gather(1); }
 
     for (int t = 0; t < STAGES - 1; ++t) issue(t);
     for (int t = 0; t < ntiles; ++t) {
@@ -174,6 +217,27 @@ __global__ void gemm_wmma_splitk_pipe(const half* A, const half* B, AccT* P, int
             for (int i = 0; i < 2; i++)
                 for (int j = 0; j < 2; j++) wmma::mma_sync(acc[i][j], a_frag[i], b_frag[j], acc[i][j]);
         }
+        // stage (t+1) % STAGES was last read for tile t+1-STAGES, which every warp finished before the
+        // barrier above, so it's free; the next barrier makes these stores visible before tile t+1 is read
+        if constexpr (KS > 0) { stash(t + 1); gather(t + 2); }
+    }
+    if constexpr (EPI) {
+        __pipeline_wait_prior(0);
+        __syncthreads();  // every warp is done reading the tiles, so their memory can hold the scratch
+        float* Cw = reinterpret_cast<float*>(smem) + warp * 32 * 32;  // this warp's 32x32 outputs
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                wmma::store_matrix_sync(Cw + i * WMMA * 32 + j * WMMA, acc[i][j], 32, wmma::mem_row_major);
+        __syncwarp();
+        int lane = tid % WARP_SIZE;
+        for (int e = lane; e < 32 * 32; e += WARP_SIZE) {  // consecutive lanes -> consecutive pixels
+            int co = row0 + wr + e / 32, p = col0 + wc + e % 32;
+            if (p < n_real) {
+                float v = Cw[e] + bias[co];
+                Y[(size_t)co * n_real + p] = __float2half(relu ? fmaxf(v, 0.0f) : v);
+            }
+        }
+        return;
     }
     AccT* Pz = P + (size_t)blockIdx.z * M * N;
     for (int i = 0; i < 2; i++)

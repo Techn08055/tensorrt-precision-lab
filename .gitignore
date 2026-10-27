@@ -32,6 +32,7 @@ gemm/profiling/ablate_wmma_vec
 gemm/profiling/mma_rate
 conv/src/conv846_gemm
 conv/src/conv3x3_gemm
+conv/src/conv_gemm
 conv/data/
 
 # Large binary Nsight traces — the small *_cuda_gpu_kern_sum.csv summaries are kept, they're the actual cited evidence

@@ -1,0 +1,58 @@
+Conv_754: 3x224 -> 64x112 k7 s2  ours 0.0652 ms (split 1, ok 1)  cublas 0.0460  trt 0.0268  -> ours is 0.41x TRT speed
+Conv_756: 64x56 -> 64x56 k1 s1  ours 0.0113 ms (split 1, ok 1)  cublas 0.0051  trt 0.0102  -> ours is 0.91x TRT speed
+Conv_758: 64x56 -> 64x56 k3 s1  ours 0.0513 ms (split 2, ok 1)  cublas 0.0487  trt 0.0179  -> ours is 0.35x TRT speed
+Conv_760: 64x56 -> 256x56 k1 s1  ours 0.0310 ms (split 1, ok 1)  cublas 0.0122  trt 0.0181  -> ours is 0.58x TRT speed
+Conv_762: 64x56 -> 256x56 k1 s1  ours 0.0310 ms (split 1, ok 1)  cublas 0.0122  trt 0.0163  -> ours is 0.53x TRT speed
+Conv_764: 256x56 -> 64x56 k1 s1  ours 0.0164 ms (split 1, ok 1)  cublas 0.0137  trt 0.0140  -> ours is 0.85x TRT speed
+Conv_766: 64x56 -> 64x56 k3 s1  ours 0.0393 ms (split 2, ok 1)  cublas 0.0369  trt 0.0151  -> ours is 0.38x TRT speed
+Conv_768: 64x56 -> 256x56 k1 s1  ours 0.0311 ms (split 1, ok 1)  cublas 0.0122  trt 0.0163  -> ours is 0.52x TRT speed
+Conv_770: 256x56 -> 64x56 k1 s1  ours 0.0164 ms (split 1, ok 1)  cublas 0.0137  trt 0.0182  -> ours is 1.11x TRT speed
+Conv_772: 64x56 -> 64x56 k3 s1  ours 0.0513 ms (split 2, ok 1)  cublas 0.0487  trt 0.0191  -> ours is 0.37x TRT speed
+Conv_774: 64x56 -> 256x56 k1 s1  ours 0.0312 ms (split 1, ok 1)  cublas 0.0123  trt 0.0163  -> ours is 0.52x TRT speed
+Conv_776: 256x56 -> 128x56 k1 s1  ours 0.0264 ms (split 1, ok 1)  cublas 0.0197  trt 0.0224  -> ours is 0.85x TRT speed
+Conv_778: 128x56 -> 128x28 k3 s2  ours 0.0381 ms (split 3, ok 1)  cublas 0.0364  trt 0.0205  -> ours is 0.54x TRT speed
+Conv_780: 128x28 -> 512x28 k1 s1  ours 0.0270 ms (split 1, ok 1)  cublas 0.0187  trt 0.0141  -> ours is 0.52x TRT speed
+Conv_782: 256x56 -> 512x28 k1 s2  ours 0.0376 ms (split 1, ok 1)  cublas 0.0285  trt 0.0222  -> ours is 0.59x TRT speed
+Conv_784: 512x28 -> 128x28 k1 s1  ours 0.0313 ms (split 2, ok 1)  cublas 0.0279  trt 0.0130  -> ours is 0.42x TRT speed
+Conv_786: 128x28 -> 128x28 k3 s1  ours 0.0291 ms (split 3, ok 1)  cublas 0.0276  trt 0.0162  -> ours is 0.56x TRT speed
+Conv_788: 128x28 -> 512x28 k1 s1  ours 0.0269 ms (split 1, ok 1)  cublas 0.0187  trt 0.0121  -> ours is 0.45x TRT speed
+Conv_790: 512x28 -> 128x28 k1 s1  ours 0.0313 ms (split 2, ok 1)  cublas 0.0279  trt 0.0131  -> ours is 0.42x TRT speed
+Conv_792: 128x28 -> 128x28 k3 s1  ours 0.0291 ms (split 3, ok 1)  cublas 0.0277  trt 0.0149  -> ours is 0.51x TRT speed
+Conv_794: 128x28 -> 512x28 k1 s1  ours 0.0269 ms (split 1, ok 1)  cublas 0.0187  trt 0.0124  -> ours is 0.46x TRT speed
+Conv_796: 512x28 -> 128x28 k1 s1  ours 0.0274 ms (split 2, ok 1)  cublas 0.0244  trt 0.0131  -> ours is 0.48x TRT speed
+Conv_798: 128x28 -> 128x28 k3 s1  ours 0.0291 ms (split 3, ok 1)  cublas 0.0276  trt 0.0148  -> ours is 0.51x TRT speed
+Conv_800: 128x28 -> 512x28 k1 s1  ours 0.0270 ms (split 1, ok 1)  cublas 0.0187  trt 0.0136  -> ours is 0.51x TRT speed
+Conv_802: 512x28 -> 256x28 k1 s1  ours 0.0400 ms (split 1, ok 1)  cublas 0.0376  trt 0.0173  -> ours is 0.43x TRT speed
+Conv_804: 256x28 -> 256x14 k3 s2  ours 0.0273 ms (split 6, ok 1)  cublas 0.0300  trt 0.0152  -> ours is 0.56x TRT speed
+Conv_806: 256x14 -> 1024x14 k1 s1  ours 0.0228 ms (split 1, ok 1)  cublas 0.0176  trt 0.0098  -> ours is 0.43x TRT speed
+Conv_808: 512x28 -> 1024x14 k1 s2  ours 0.0263 ms (split 1, ok 1)  cublas 0.0214  trt 0.0237  -> ours is 0.90x TRT speed
+Conv_810: 1024x14 -> 256x14 k1 s1  ours 0.0259 ms (split 2, ok 1)  cublas 0.0280  trt 0.0106  -> ours is 0.41x TRT speed
+Conv_812: 256x14 -> 256x14 k3 s1  ours 0.0273 ms (split 6, ok 1)  cublas 0.0300  trt 0.0123  -> ours is 0.45x TRT speed
+Conv_814: 256x14 -> 1024x14 k1 s1  ours 0.0227 ms (split 1, ok 1)  cublas 0.0175  trt 0.0098  -> ours is 0.43x TRT speed
+Conv_816: 1024x14 -> 256x14 k1 s1  ours 0.0260 ms (split 2, ok 1)  cublas 0.0281  trt 0.0106  -> ours is 0.41x TRT speed
+Conv_818: 256x14 -> 256x14 k3 s1  ours 0.0272 ms (split 6, ok 1)  cublas 0.0300  trt 0.0119  -> ours is 0.44x TRT speed
+Conv_820: 256x14 -> 1024x14 k1 s1  ours 0.0228 ms (split 1, ok 1)  cublas 0.0176  trt 0.0098  -> ours is 0.43x TRT speed
+Conv_822: 1024x14 -> 256x14 k1 s1  ours 0.0259 ms (split 2, ok 1)  cublas 0.0280  trt 0.0109  -> ours is 0.42x TRT speed
+Conv_824: 256x14 -> 256x14 k3 s1  ours 0.0352 ms (split 6, ok 1)  cublas 0.0392  trt 0.0131  -> ours is 0.37x TRT speed
+Conv_826: 256x14 -> 1024x14 k1 s1  ours 0.0228 ms (split 1, ok 1)  cublas 0.0175  trt 0.0100  -> ours is 0.44x TRT speed
+Conv_828: 1024x14 -> 256x14 k1 s1  ours 0.0259 ms (split 2, ok 1)  cublas 0.0280  trt 0.0107  -> ours is 0.41x TRT speed
+Conv_830: 256x14 -> 256x14 k3 s1  ours 0.0274 ms (split 6, ok 1)  cublas 0.0300  trt 0.0135  -> ours is 0.49x TRT speed
+Conv_832: 256x14 -> 1024x14 k1 s1  ours 0.0228 ms (split 1, ok 1)  cublas 0.0175  trt 0.0099  -> ours is 0.43x TRT speed
+Conv_834: 1024x14 -> 256x14 k1 s1  ours 0.0200 ms (split 2, ok 1)  cublas 0.0215  trt 0.0107  -> ours is 0.54x TRT speed
+Conv_836: 256x14 -> 256x14 k3 s1  ours 0.0351 ms (split 6, ok 1)  cublas 0.0391  trt 0.0120  -> ours is 0.34x TRT speed
+Conv_838: 256x14 -> 1024x14 k1 s1  ours 0.0228 ms (split 1, ok 1)  cublas 0.0176  trt 0.0099  -> ours is 0.43x TRT speed
+Conv_840: 1024x14 -> 512x14 k1 s1  ours 0.0275 ms (split 1, ok 1)  cublas 0.0324  trt 0.0143  -> ours is 0.52x TRT speed
+Conv_842: 512x14 -> 512x7 k3 s2  ours 0.0242 ms (split 12, ok 1)  cublas 0.0342  trt 0.0160  -> ours is 0.66x TRT speed
+Conv_844: 512x7 -> 2048x7 k1 s1  ours 0.0189 ms (split 1, ok 1)  cublas 0.0283  trt 0.0099  -> ours is 0.52x TRT speed
+Conv_846: 1024x14 -> 2048x7 k1 s2  ours 0.0291 ms (split 1, ok 1)  cublas 0.0409  trt 0.0191  -> ours is 0.66x TRT speed
+Conv_848: 2048x7 -> 512x7 k1 s1  ours 0.0207 ms (split 4, ok 1)  cublas 0.0260  trt 0.0109  -> ours is 0.53x TRT speed
+Conv_850: 512x7 -> 512x7 k3 s1  ours 0.0308 ms (split 12, ok 1)  cublas 0.0445  trt 0.0149  -> ours is 0.48x TRT speed
+Conv_852: 512x7 -> 2048x7 k1 s1  ours 0.0190 ms (split 1, ok 1)  cublas 0.0284  trt 0.0086  -> ours is 0.45x TRT speed
+Conv_854: 2048x7 -> 512x7 k1 s1  ours 0.0208 ms (split 4, ok 1)  cublas 0.0261  trt 0.0097  -> ours is 0.47x TRT speed
+Conv_856: 512x7 -> 512x7 k3 s1  ours 0.0241 ms (split 12, ok 1)  cublas 0.0341  trt 0.0149  -> ours is 0.62x TRT speed
+Conv_858: 512x7 -> 2048x7 k1 s1  ours 0.0189 ms (split 1, ok 1)  cublas 0.0282  trt 0.0100  -> ours is 0.53x TRT speed
+
+53 layers, all ok: True
+sum of per-layer times: ours 1.503 ms (of which im2col 0.419), im2col+cuBLAS 1.404 ms, TensorRT one-layer engines 0.751 ms
+
+[exited with code 0]

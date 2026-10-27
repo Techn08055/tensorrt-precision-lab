@@ -15,20 +15,14 @@ import numpy as np
 import tensorrt as trt
 import torch
 
-# layer: (Cin, H_in, Cout, kernel, stride, pad, relu fused in the full engine)
-LAYERS = {
-    "Conv_846": (1024, 14, 2048, 1, 2, 0, False),
-    "Conv_842": (512, 14, 512, 3, 2, 1, True),
-    "Conv_850": (512, 7, 512, 3, 1, 1, True),
-    "Conv_856": (512, 7, 512, 3, 1, 1, True),
-}
 layer = sys.argv[1] if len(sys.argv) > 1 else "Conv_850"
-cin, h, cout, k, s, pad, relu = LAYERS[layer]
 data = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", layer)
+# meta.txt from export_conv_real.py: Cin H Cout kernel stride pad Ho relu (relu fused in the full engine)
+cin, h, cout, k, s, pad, ho, relu = map(int, open(os.path.join(data, "meta.txt")).read().split())
 x = np.fromfile(os.path.join(data, "x.bin"), np.float16).reshape(1, cin, h, h)
 w = np.fromfile(os.path.join(data, "w.bin"), np.float16).reshape(cout, cin, k, k).astype(np.float32)
 b = np.fromfile(os.path.join(data, "b.bin"), np.float32)
-y_ref = np.fromfile(os.path.join(data, "y_ref.bin"), np.float32).reshape(1, cout, 7, 7)
+y_ref = np.fromfile(os.path.join(data, "y_ref.bin"), np.float32).reshape(1, cout, ho, ho)
 if relu:
     y_ref = np.maximum(y_ref, 0)
 
@@ -53,7 +47,7 @@ kernels = [(l.get("Name", "?"), l.get("TacticName", "")) for l in info["Layers"]
 
 ctx = engine.create_execution_context()
 dx = torch.from_numpy(x).cuda()
-dy = torch.empty(1, cout, 7, 7, device="cuda", dtype=torch.half)
+dy = torch.empty(1, cout, ho, ho, device="cuda", dtype=torch.half)
 ctx.set_tensor_address("x", dx.data_ptr())
 ctx.set_tensor_address("y", dy.data_ptr())
 stream = torch.cuda.Stream()

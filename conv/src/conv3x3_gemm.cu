@@ -248,7 +248,7 @@ int main(int argc, char** argv) {
         else gemm_wmma_splitk_pipe<4, float, 8><<<g, b>>>(dW, dXc, dP, C3_CO, NPAD, C3_K);
         reduce_bias_c3<float><<<(C3_CO * NPIX + 255) / 256, 256>>>(dP, dBias, dY, splits, relu);
     };
-    int bestp_stages = 2, bestp_splits = 12, bestp_fp16 = 0;
+    int bestp_stages = 2, bestp_splits = 12;
     float bestp_t = 1e30f;
     for (int fp16 = 0; fp16 < 2; ++fp16)
     for (int stages = 2; stages <= 4; ++stages)
