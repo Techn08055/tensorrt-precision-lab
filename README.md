@@ -2,15 +2,30 @@
 
 A reproducible investigation into how ResNet50 inference actually executes on a GPU —
 from CUDA kernels up through TensorRT, precision, and fusion. One model, one GPU,
-throughout. Started as a TensorRT FP32/FP16/INT8 precision experiment; growing toward
-CUDA kernel work (GEMM, Conv2D) underneath it as the same model, same measurements.
+throughout. Started as a TensorRT FP32/FP16/INT8 precision experiment, then went underneath
+it: a GEMM kernel ladder, then every ResNet50 convolution on our own kernels, measured
+against cuBLAS and TensorRT with the same model and the same measurements.
+
+## Where it ended up
+
+- **Precision (TensorRT):** scattering INT8 over only the "safe" layers bought no speed, because the
+  format conversions between FP16 and INT8 layers cost as much as INT8 saved. Keeping just the two
+  most sensitive units (stem + first block) in FP16 and the other 48 conv layers in INT8 needs only
+  3 conversions and is 1.58x faster than FP16 (0.381 vs ~0.603 ms), at 93.75% top-1 on 64 images
+  (not a held-out split).
+- **GEMM ([`gemm/`](gemm/)):** naive ~650 → ~13,000 GFLOPS at 2048 in five steps, about half of
+  cuBLAS.
+- **Convolutions ([`conv/`](conv/)):** all 53 ResNet50 conv layers on our own kernels, checked
+  against ONNX: 0.962 ms against 0.735 ms for TensorRT one-layer engines (1.31x), faster on 12
+  layers, ~5x lower error. Profiled with Nsight Compute: the rest of the gap is TensorRT's FP16
+  accumulation, which we chose not to match.
 
 ## Research questions
 
 | # | Question | Where | Status |
 |---|---|---|---|
-| 01 | How does GEMM execute on a GPU? | [`gemm/`](gemm/) | in progress — naive → tiled → register-blocked → WMMA kernels done, at ~40-60% of cuBLAS |
-| 02 | How does a ResNet convolution map to GEMM? | [`conv/`](conv/) | in progress — the 4 slowest layers (`Conv_846` 1x1, `Conv_842`/`850`/`856` 3x3) run as GEMMs on real weights, level with cuBLAS, ~2x behind TensorRT |
+| 01 | How does GEMM execute on a GPU? | [`gemm/`](gemm/) | done — naive → tiled → register-blocked → WMMA → vectorized WMMA, ~40-60% of cuBLAS on square sizes; continued in `conv/` |
+| 02 | How does a ResNet convolution map to GEMM? | [`conv/`](conv/) | done — all 53 conv layers on our own kernels, checked against ONNX: 0.962 ms vs TensorRT one-layer engines 0.735 ms (1.31x), faster on 12 layers, ~5x lower error (FP32 accumulation by choice); Nsight Compute comparison; first fused bottleneck block |
 | 03 | What does FP32→FP16→INT8 cost and save? | [`resnet/`](resnet/), this file below | done ([video 1](videos/01_fp32_fp16_int8/)) |
 | 04 | What does TensorRT fuse, and is there more to fuse? | [`profiling/`](profiling/) | done |
 | 05 | Can quantizing only the safe layers keep INT8's speed? | [`profiling/INT8_SENSITIVITY_SWEEP.md`](profiling/INT8_SENSITIVITY_SWEEP.md) | done ([video 2](videos/02_mixed_precision/)) |
@@ -29,13 +44,12 @@ scripts/          build / benchmark / calibrate / profile / sweep -- one script 
 benchmarks/       raw measured numbers (csv/json)
 profiling/        per-layer timing, Nsight traces, the sensitivity-sweep + fusion writeups
 results/          the narrative writeup of the fp32/fp16/int8 results below
-videos/           two-part video documentary built from this lab:
-                    01_fp32_fp16_int8/  -- this precision module
-                    02_mixed_precision/ -- the sensitivity-sweep/fusion follow-up
+videos/           (gitignored, kept outside this repo) video production for the lab's videos
 ```
 
-Everything below this point documents the **FP32/FP16/INT8 module** (question 03 above,
-the first and so far most complete piece of the lab).
+Everything below this point documents the **FP32/FP16/INT8 module** (questions 03-06 above,
+the first piece of the lab). [`gemm/`](gemm/) and [`conv/`](conv/) each have their own README with
+results, conclusion and an experiment log.
 
 ## Question
 

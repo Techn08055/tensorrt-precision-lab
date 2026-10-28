@@ -7,9 +7,15 @@
 //   M = 2048 output channels, N = 49 output pixels, K = 1024 input channels.
 // NCHW output with batch 1 is exactly the row-major M x N result, so no transpose.
 //
-// Times: the stride-2 gather, the step-4 WMMA GEMM from ../../gemm/ (at N=49 and with
-// N zero-padded to 64), and cuBLAS on the same packed input. Bias is added on the host
-// for the check only; no kernel here applies it yet.
+// Its main() times the stride-2 gather, the step-4 WMMA GEMM from ../../gemm/ (at N=49 and
+// with N zero-padded to 64), cuBLAS on the same packed input, and split-K with a reduce that
+// adds bias (plain and with the gather folded into the tile load).
+//
+// This file also holds the shared conv kernel that every other driver includes (with
+// CONV846_NO_MAIN defined): gemm_tile, the pipelined split-K WMMA GEMM for one output tile
+// (block tile, copy width, implicit 3x3 gather and direct-output epilogue as template options),
+// and its one-tile-per-block wrapper gemm_wmma_splitk_pipe. Users: conv_gemm.cu (all 53 layers),
+// conv3x3_gemm.cu (the 3x3 study) and block_fused.cu (the fused bottleneck block).
 //
 // Build: nvcc -O3 -arch=sm_89 conv846_gemm.cu -o conv846_gemm -lcublas
 // Run:   ./conv846_gemm             random data at the real shape
@@ -360,7 +366,7 @@ static void read_bin(const std::string& path, std::vector<T>& v) {
     fclose(f);
 }
 
-#ifndef CONV846_NO_MAIN  // conv850_gemm.cu includes this file for its split-K kernel
+#ifndef CONV846_NO_MAIN  // conv_gemm.cu, conv3x3_gemm.cu and block_fused.cu include this file for its kernels
 int main(int argc, char** argv) {
     const bool real = argc > 1;
     std::vector<half> hX((size_t)CI * HW_IN * HW_IN), hW((size_t)CO * CI), hY((size_t)CO * NPAD);

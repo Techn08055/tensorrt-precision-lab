@@ -1,12 +1,15 @@
 // conv_gemm.cu
 // Any ResNet50 conv layer (square input, symmetric pad, group 1) as im2col + GEMM, batch 1, FP16,
-// using the best kernel from the per-layer work: 2-3 stage cp.async pipeline, padded shared-memory
-// rows, split-K with FP32 partials, then one reduce that adds bias (+ ReLU if the layer has one).
+// using the shared kernel from conv846_gemm.cu: 2-stage cp.async pipeline, padded shared-memory rows,
+// FP32 accumulation, then either the final output written straight from the GEMM (1 split) or
+// split-K with FP32 partials and one reduce kernel; both add bias (+ ReLU if the layer has one).
+// 1x1 stride-1 layers read X in place; 3x3 layers can gather their tiles from X (implicit GEMM).
 //
 // As a GEMM: M = Cout, N = Ho*Wo (zero-padded to a multiple of 64), K = Cin*k*k (zero-padded to a
 // multiple of 32; only the 7x7 stem needs it, 147 -> 160). k = ci*k*k + kh*k + kw, which is the
 // ONNX weight layout, so W is used as-is apart from the K padding (done once, like a build step).
-// The split count and pipeline depth are picked per layer by timing every candidate.
+// Block tile, split count, and im2col vs implicit are picked per layer by timing every candidate,
+// the way TensorRT picks its kernels. Flags turn each option off: nodirect noepi noimplicit notiles.
 //
 // Build: nvcc -O3 -arch=sm_89 conv_gemm.cu -o conv_gemm -lcublas
 // Run:   ./conv_gemm ../data/Conv_850     (tensors + meta.txt from ../benchmarks/export_conv_real.py)
@@ -42,7 +45,6 @@ __global__ void reduce_any(const float* P, const float* bias, half* Y, int split
     Y[i] = __float2half(relu ? fmaxf(s, 0.0f) : s);
 }
 
-// One GEMM launch for the chosen pipeline depth, copy width and epilogue.
 // One GEMM launch: 2-stage pipeline, pad 8, block tile TM x TN, copy width BV, KS = 3 for implicit GEMM
 // straight from X (the conv geometry is only used then). epi: one split, write the final output from
 // the GEMM; otherwise FP32 partials for the reduce kernel. g must already match the tile (n_tiles, m/TM, splits).
@@ -181,7 +183,8 @@ int main(int argc, char** argv) {
            flops / t_cublas / 1e6, e_cublas);
 
     // explicit im2col and (3x3 layers) implicit GEMM, every tile shape and split count; fastest wins.
-    // (3-stage pipelines were dropped: picked on 2 of 53 layers in the previous run.)
+    // (2-stage pipeline only: 3 stages won on 2 of 53 layers once, and depth doesn't matter while the
+    // FP32-accumulate tensor pipe is the limit; the RESULT line keeps stages= for the CSV columns.)
     const char* tile_name[4] = {"64x64", "32x64", "64x32", "32x32"};
     int best_stages = 2, best_splits = 1, best_impl = 0, best_tile = 0;
     float best_t = 1e30f;

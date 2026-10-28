@@ -1,10 +1,94 @@
 # Conv2D
 
-Second CUDA-kernel module: take real convolutions out of `resnet/` and run them as
-GEMMs, starting from the heaviest layers in the per-layer profiles in `../profiling/`.
-Builds on [`../gemm/`](../gemm/); see the repo root [`README.md`](../README.md).
+Second CUDA-kernel module (research question 02 in the root [`README.md`](../README.md)): run every
+convolution in ResNet50 as a GEMM on our own tensor-core kernels, with the real weights and
+activations, and measure each layer against cuBLAS and TensorRT. Builds on [`../gemm/`](../gemm/).
 
-## Status
+## Result
+
+All 53 conv layers, batch 1, FP16 inputs, **FP32 accumulation**, every layer checked against ONNX's
+own output. Each layer is timed against a one-layer TensorRT FP16 engine built from the same weights
+and timed the same way (CUDA-graph replay), and against im2col + cuBLAS. Sums of per-layer times
+from [`results/all_layers.csv`](results/all_layers.csv):
+
+| Layer group | Layers | Ours (ms) | TensorRT (ms) | Ours / TensorRT time | im2col + cuBLAS (ms) |
+|---|---:|---:|---:|---:|---:|
+| stem 7x7 s2 → 112x112 | 1 | 0.048 | 0.027 | 1.78 | 0.046 |
+| 1x1 s1 @56x56 | 8 | 0.095 | 0.135 | **0.71** | 0.090 |
+| 3x3 s1 @56x56 | 3 | 0.073 | 0.047 | 1.55 | 0.116 |
+| 1x1 s1 @28x28 | 8 | 0.103 | 0.106 | **0.97** | 0.105 |
+| 3x3 s1 @28x28 | 3 | 0.079 | 0.044 | 1.79 | 0.083 |
+| 1x1 s1 @14x14 | 12 | 0.154 | 0.128 | 1.20 | 0.179 |
+| 3x3 s1 @14x14 | 5 | 0.130 | 0.061 | 2.13 | 0.150 |
+| 1x1 s1 @7x7 | 5 | 0.085 | 0.046 | 1.85 | 0.126 |
+| 3x3 s1 @7x7 | 2 | 0.047 | 0.030 | 1.57 | 0.068 |
+| stride-2 1x1 | 3 | 0.073 | 0.061 | 1.19 | 0.081 |
+| stride-2 3x3 | 3 | 0.076 | 0.051 | 1.50 | 0.092 |
+| **All 53** | **53** | **0.962** | **0.735** | **1.31** | **1.136** |
+
+- Faster than TensorRT's one-layer engine on 12 of 53 layers (all 1x1, mostly at 56x56 and 28x28);
+  faster than im2col + cuBLAS overall.
+- Error against ONNX, as a share of each layer's largest output: median 0.044% ours vs 0.24%
+  TensorRT, worst 0.11% vs 0.71% — about 5x lower, because we accumulate in FP32 and TensorRT's
+  kernels accumulate in FP16.
+- Not the same as the full TensorRT engine: that runs the whole network (convs and everything else)
+  in ~0.60 ms, fusing residual adds and sharing layout copies that each one-layer engine pays for.
+- Measured on battery in the laptop's `low-power` profile (35 W GPU cap, software power and thermal
+  caps active), so absolute times are low and vary run to run by up to ~1.33x; ours and TensorRT were
+  timed close together, so the ratios hold.
+
+## Conclusion
+
+1. **Data movement, not math, gave the big wins.** Reading 1x1 inputs in place instead of copying
+   them to pad, writing the output straight from the GEMM instead of round-tripping FP32 partials,
+   and gathering 3x3 tiles while loading (implicit GEMM) took the sum from 1.50 to 1.06 ms. Padding
+   shared-memory rows by 8 halves (bank conflicts) and a `cp.async` pipeline were the biggest
+   single-kernel steps.
+2. **The remaining 1.31x is in the GEMM kernel, and it's explained.** Nsight Compute on the same
+   layer and launch shape: after restructuring our main loop we run fewer instructions than
+   TensorRT (389K vs 473K), and what's left is the tensor pipe itself. TensorRT accumulates in FP16,
+   which runs the tensor cores at 2x on GeForce GPUs; with that plus a 4-stage pipeline our kernel
+   was 1.41x faster, at TensorRT's error level. We kept FP32 accumulation on purpose.
+3. **Ideas that measured slower or no better:** a last-block split-K reduce and a 64-deep k-step
+   (both removed from the code); folding the stride-2 gather into the tile load (kept only in the
+   `Conv_846` study driver); smaller tiles as a replacement for split-K on the 14x14 / 7x7 layers
+   (the tile option stayed, since it helps 20 other layers); FP16 accumulation alone on the old loop
+   (1.05x).
+4. **Fusion has to wait for a faster GEMM.** The first fused bottleneck block (one cooperative
+   launch, im2col layout written by the previous stage, residual in the epilogue) is correct but no
+   faster: its three GEMMs are 51 of 67 µs, and TensorRT runs the whole block in 28.5 µs.
+
+Not pursued: 8 warps per block (2 per scheduler) and bigger per-warp tiles under FP32 accumulation
+(the remaining lever per the profile); the fused block's slow 1-split placement; direct reads for
+N = 49 (the 7x7 1x1 layers still copy); INT8 tensor cores; batch > 1.
+
+## How to run
+
+```bash
+cd benchmarks
+python export_conv_real.py all          # real tensors + meta.txt for all 53 layers -> ../data/ (~110 MB)
+cd ../src
+nvcc -O3 -arch=sm_89 conv_gemm.cu -o conv_gemm -lcublas
+./conv_gemm ../data/Conv_850            # one layer: every option timed, last line is RESULT
+cd ../benchmarks
+python run_all_layers.py                # all 53 layers vs cuBLAS and TensorRT -> ../results/all_layers.csv
+python trt_block.py                     # TensorRT on one whole bottleneck block
+```
+The Python scripts need the venv with numpy, onnx, onnxruntime, tensorrt and torch.
+
+## Files
+
+```
+src/conv846_gemm.cu      shared kernels (gemm_tile + wrapper); its main() is the first Conv_846 study
+src/conv_gemm.cu         general driver: any layer, picks tile / split / implicit per layer
+src/conv3x3_gemm.cu      3x3 study driver: im2col variants, implicit GEMM, padding, pipeline depth
+src/block_fused.cu       fused bottleneck block (Conv_848 -> Conv_850 -> Conv_852 + residual)
+benchmarks/              tensor export, cuDNN / TensorRT baselines, all-layer runner
+results/                 all_layers.csv (final), all_layers_v1-v4 (earlier passes), per-layer CSVs
+data/                    exported tensors (gitignored, regenerate with export_conv_real.py)
+```
+
+## Experiment log (in order)
 
 - [x] `Conv_846` (slowest layer in every FP32/FP16/INT8 profile): 1x1 conv, stride 2, 1024x14x14 → 2048x7x7, which is a GEMM with M=2048, N=49, K=1024 after packing the stride-2 pixels — [`src/conv846_gemm.cu`](src/conv846_gemm.cu) (reuses the step-4 WMMA kernel from `../gemm/` unchanged), [`benchmarks/torch_conv.py`](benchmarks/torch_conv.py) (cuDNN baseline), [`results/conv846_gemm.csv`](results/conv846_gemm.csv). FP16, batch 1, no bias, random data at the real shape. Gather + WMMA GEMM: 0.070 ms; gather + cuBLAS: 0.037 ms; cuDNN `conv2d`: 0.027-0.035 ms; TensorRT FP16 layer (from the profile, with bias): 0.043 ms. The gather is 0.003 ms; the gap is the GEMM. Both GEMM outputs are within FP16 rounding of an FP32 CPU conv reference
 - [x] Verified on real ResNet50 tensors — [`benchmarks/export_conv_real.py`](benchmarks/export_conv_real.py) runs a real calibration image through the ONNX model in onnxruntime and dumps `Conv_846`'s actual input activation, weights, bias and ONNX's own FP32 output to `data/Conv_846/` (gitignored, regenerate with the script); `./conv846_gemm ../data/Conv_846` uses them. Output + bias matches ONNX within 0.0063 at values up to 14.8 (under one FP16 step at that magnitude) — [`results/conv846_gemm_real.csv`](results/conv846_gemm_real.csv)
@@ -34,10 +118,9 @@ Builds on [`../gemm/`](../gemm/); see the repo root [`README.md`](../README.md).
 - [x] **Main-loop restructure** (same instructions): each thread's `cp.async` source pointers, shared-memory offsets and zero-fill sizes are computed once per tile run and advanced by a fixed step per k-tile (no divide / modulo / edge branch per copy), and fragments are double-buffered (the next 16-deep k-slice's `ldmatrix` loads go out before the current slice's `mma_sync`s). Same-session old vs new binaries: the few-block configurations TensorRT uses got 1.2-1.56x faster (`Conv_812` explicit 64x64 / 1 split 0.0504 → 0.0324 ms, `Conv_816` 0.0218 → 0.0174, `Conv_850` 0.0638 → 0.0515, implicit `Conv_812` at 16 blocks 0.0702 → 0.0628), best configs mostly 1.0-1.33x (`Conv_758` 0.0316 → 0.0237). All 53 layers: [`results/all_layers.csv`](results/all_layers.csv) (previous: [`results/all_layers_v4.csv`](results/all_layers_v4.csv)), all match ONNX, **sum 0.994 → 0.962 ms** with TensorRT steady (0.737 → 0.735), gap **1.35x → 1.31x**, ahead of TensorRT on the 1x1 @56 group (0.71x of its time) and level on 1x1 @28 (0.97x). The best configs had been using split-K to hide the slow loop, so most of the gain shows up where few blocks are used. Fused block: 0.063-0.067 ms at 4-8 / 12 splits (barely moved); at 1 split it's 0.22 ms fused vs 0.12 ms as separate launches, which looks like the persistent grid placing the few busy blocks on the same SMs (not checked)
 - [x] **Re-profile after the restructure** (`results/ncu_ours_conv812_v2.ncu-rep`, same 16-block launch): instructions 746K → **389K** (now fewer than TensorRT's 473K), branch stalls 0.29 → 0.04 (TensorRT 0.04), but time only 51.8 → 47.2 µs: cycles per instruction rose 7.1 → 12.5, now dominated by the tensor-core instructions themselves (`HMMA.16816.F32` collect ~46% of stall samples; math-pipe stall 3.65 vs TensorRT 1.16) and the wait right after each tile's copies + barrier (~18%). Same-session test, `Conv_812`, 64x64 tiles, 16 blocks, 1 split, direct output, im2col built on the host so only the GEMM is timed: FP32 accumulation 2 / 3 / 4 stages = 0.0323 / 0.0320 / 0.0318 ms (depth doesn't matter: the half-rate FP32-accumulate tensor pipe is the limit); **FP16 accumulation 2 / 4 stages = 0.0299 / 0.0226 ms**, i.e. 1.41x faster than FP32 with a 4-stage pipeline, error 0.0027 → 0.044 (TensorRT's level, 0.038-0.044). So with the loop overhead gone, the remaining per-kernel gap to TensorRT is mostly its precision choice (FP16 accumulation) plus the pipeline depth that only pays off once the tensor pipe is twice as fast
 - Decision (2026-10-28): the kernels stay **FP32-accumulate only**, keeping the ~5x accuracy advantage over TensorRT; no FP16-accumulate mode. Under FP32 accumulation the tensor pipe is the limit in the few-block configurations, so pipeline depth stays at 2
-- [ ] Close the rest of the gap: fold the split-K reduce into the GEMM (last block to finish sums the partials) and have the previous layer write im2col layout directly; then the GEMM itself (BK=64 stages, more output per warp). `Conv_846` doesn't use the pipelined kernel yet
-- [ ] Bias + ReLU in the epilogue
 
 ## Hardware
 
-Same machine as the rest of this lab: RTX 4050 Laptop GPU (sm_89), CUDA 12.0 `nvcc`,
-cuDNN 9.2 through PyTorch 2.12 (no cuDNN C headers installed).
+Same machine as the rest of this lab: RTX 4050 Laptop GPU (sm_89, 20 SMs), driver 580.178.04,
+CUDA 12.0 `nvcc`, TensorRT 10.14.1, cuDNN 9.2 through PyTorch 2.12 (no cuDNN C headers installed).
+Nsight Compute needs `sudo` here (GPU counters are admin-only).

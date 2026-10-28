@@ -3,6 +3,9 @@
 //   Conv_850, Conv_856  stride 1, 512x7x7  -> 512x7x7
 //   Conv_842            stride 2, 512x14x14 -> 512x7x7
 // Explicit im2col + split-K WMMA GEMM + reduce (bias, optional ReLU).
+// This is the per-layer study driver that compares the variants one by one (old vs v2 im2col,
+// implicit GEMM, FP16 accumulators, pipeline depth, padding); conv_gemm.cu is the general
+// driver that runs every layer with the winning options.
 //
 // As a GEMM: M = 512 output channels, N = 49 output pixels (padded to 64),
 // K = 512 input channels x 9 taps = 4608, with k = ci*9 + kh*3 + kw. That k order is
@@ -13,7 +16,7 @@
 // Run:   ./conv3x3_gemm ../data/Conv_850 1    (stride 1; real tensors from ../benchmarks/export_conv_real.py)
 //        ./conv3x3_gemm ../data/Conv_842 2
 
-// Reuse the split-K kernel, timer, file reader and cuBLAS handle from the Conv_846 driver.
+// Reuse the split-K kernels, timer, file reader and cuBLAS handle from conv846_gemm.cu.
 #define CONV846_NO_MAIN
 #include "conv846_gemm.cu"
 #include <cstring>
