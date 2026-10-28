@@ -36,7 +36,7 @@ for layer in layers:
         e = re.search(r"max\|out - onnx\| ([\d.e-]+)", out)
         trt.append((float(m.group(1)), float(e.group(1))))
     trt_ms, trt_err = min(trt)
-    row = {k: best[k] for k in ("layer", "cin", "h", "cout", "k", "s", "ho", "relu", "gflop", "stages", "splits", "implicit",
+    row = {k: best[k] for k in ("layer", "cin", "h", "cout", "k", "s", "ho", "relu", "gflop", "stages", "tile", "splits", "implicit",
                                 "ours_ms", "ours_err", "im2col_ms", "cublas_ms", "max_ref", "ok")}
     row |= {"trt_ms": f"{trt_ms:.5f}", "trt_err": f"{trt_err:.5g}",
             "trt_over_ours": f"{trt_ms / float(best['ours_ms']):.3f}"}

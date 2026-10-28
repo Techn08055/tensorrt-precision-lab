@@ -71,12 +71,14 @@ def timed(fn, iters=50):
     return s0.elapsed_time(s1) / iters
 
 
+torch.cuda.cudart().cudaProfilerStart()  # nsys --capture-range=cudaProfilerApi records only the timed runs, not the build
 t_b2b = timed(lambda: ctx.execute_async_v3(stream.cuda_stream))
 graph = torch.cuda.CUDAGraph()
 with torch.cuda.graph(graph, stream=stream):
     for _ in range(50):
         ctx.execute_async_v3(stream.cuda_stream)
 t_graph = timed(graph.replay, iters=5) / 50
+torch.cuda.cudart().cudaProfilerStop()
 
 print(f"{layer} TensorRT {trt.__version__} FP16 one-layer engine ({'conv+relu' if relu else 'conv'}): "
       f"max|out - onnx| {err:.4g}")
